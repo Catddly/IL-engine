@@ -6,7 +6,10 @@
 
 	int main(int argc, char** argv)
 	{
-		printf("Welcome to IL engine!\n");
+		IL::Log::Init();
+		IL_CORE_WARN("Initalization Log!");
+		int a = 2;
+		IL_INFO("Welcome to IL engine! Var={0}", a);
 
 		auto app = IL::CreateApplication();
 		app->Run();

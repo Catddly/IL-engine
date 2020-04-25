@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "IL/Application.h"
+#include "IL/Log.h"
 
 // -------------EntryPoint---------------
 
