@@ -1,6 +1,9 @@
 #include "Application.h"
 
-namespace IL
+#include "Events/ApplicationEvent.h"
+#include "Log.h"
+
+namespace IL													
 {
 	Application::Application()
 	{
@@ -12,6 +15,12 @@ namespace IL
 
 	void Application::Run()
 	{
+		WindowResizeEvent e(1280, 720);
+		IL_TRACE(e);
+		AppRenderEvent render;
+		IL_WARN(render);
+
+
 		while (true);
 	}
 }

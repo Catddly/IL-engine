@@ -8,8 +8,8 @@
 	{
 		IL::Log::Init();
 		IL_CORE_WARN("Initalization Log!");
-		int a = 2;
-		IL_INFO("Welcome to IL engine! Var={0}", a);
+		//int a = BIT(0), b = BIT(1), c = BIT(2), d = BIT(3);
+		IL_INFO("Welcome to IL engine!");
 
 		auto app = IL::CreateApplication();
 		app->Run();
