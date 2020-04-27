@@ -5,8 +5,11 @@
 #include <string>
 #include <functional>
 
+// I will write pch.h later
+
 namespace IL
 {
+	// This event system has EventType and EventCategory in order to define which event had occured.
 
 	enum class EventType
 	{
@@ -27,6 +30,7 @@ namespace IL
 		EventCategoryMouseButton = BIT(4)
 	};
 
+// These macros are for override some virtual function in Event class
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
