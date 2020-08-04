@@ -1,3 +1,5 @@
+#include "ilpch.h"
+
 #include "Application.h"
 
 #include "Events/ApplicationEvent.h"
@@ -19,7 +21,6 @@ namespace IL
 		IL_TRACE(e);
 		AppRenderEvent render;
 		IL_WARN(render);
-
 
 		while (true);
 	}

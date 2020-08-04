@@ -1,3 +1,5 @@
+#include "ilpch.h"
+
 #include "Log.h"
 
 namespace IL

@@ -1,15 +1,12 @@
 #pragma once
 
+#include "ilpch.h"
+
 #include "IL/Core.h"
-
-#include <string>
-#include <functional>
-
-// I will write pch.h later
 
 namespace IL
 {
-	// This event system has EventType and EventCategory in order to define which event had occured.
+	// This event system has EventType and EventCategory in order to define which event had occurred.
 
 	enum class EventType
 	{
@@ -31,7 +28,7 @@ namespace IL
 	};
 
 // These macros are for override some virtual function in Event class
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
+#define EVENT_CLASS_TYPE(type)  static EventType GetStaticType() { return EventType::##type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
 

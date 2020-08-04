@@ -65,6 +65,9 @@ project "IL"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir	  ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "ilpch.h"
+	pchsource "IL/src/ilpch.cpp"
+
 	files
 	{
 		"%{prj.name}/src/**.h",

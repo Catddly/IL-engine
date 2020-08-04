@@ -9,7 +9,7 @@
 		IL::Log::Init();
 		IL_CORE_WARN("Initalization Log!");
 		//int a = BIT(0), b = BIT(1), c = BIT(2), d = BIT(3);
-		IL_INFO("Welcome to IL engine!");
+		//IL_INFO("Welcome to IL engine!");
 
 		auto app = IL::CreateApplication();
 		app->Run();
