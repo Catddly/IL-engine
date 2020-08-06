@@ -16,7 +16,7 @@ project "SandBox"
 	language "C++"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir	  ("bin-int/" .. outputdir .. "/%{prj.name}")
+	objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files
 	{
@@ -57,6 +57,11 @@ project "SandBox"
 		defines "IL_DIST"
 		optimize "On"
 
+IncludeDir = { }
+IncludeDir["GLFW"] = "IL/vendor/GLFW/include"
+
+include "IL/vendor/GLFW"
+
 project "IL"
 	location "IL"
 	kind "SharedLib"
@@ -77,7 +82,14 @@ project "IL"
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links
+	{
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -97,7 +109,11 @@ project "IL"
 		}
 
 	filter "configurations:Debug"
-		defines "IL_DEBUG"
+		defines 
+		{
+			"IL_DEBUG",
+			"IL_ENABLE_ASSERTS"
+		}
 		symbols "On"
 
 	filter "configurations:Release"

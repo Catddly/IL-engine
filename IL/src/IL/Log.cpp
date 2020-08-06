@@ -1,7 +1,5 @@
 #include "ilpch.h"
 
-#include "Log.h"
-
 namespace IL
 {
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
