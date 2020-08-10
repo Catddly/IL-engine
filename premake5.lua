@@ -47,14 +47,17 @@ project "SandBox"
 
 	filter "configurations:Debug"
 		defines "IL_DEBUG"
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "IL_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "IL_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 IncludeDir = { }
@@ -114,13 +117,16 @@ project "IL"
 			"IL_DEBUG",
 			"IL_ENABLE_ASSERTS"
 		}
+		buildoptions "/MDd"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "IL_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "IL_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
