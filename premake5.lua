@@ -62,8 +62,10 @@ project "SandBox"
 
 IncludeDir = { }
 IncludeDir["GLFW"] = "IL/vendor/GLFW/include"
+IncludeDir["glad"] = "IL/vendor/glad/include"
 
 include "IL/vendor/GLFW"
+include "IL/vendor/glad"
 
 project "IL"
 	location "IL"
@@ -86,12 +88,14 @@ project "IL"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}"
 	}
 
 	links
 	{
 		"GLFW",
+		"glad",
 		"opengl32.lib"
 	}
 
@@ -103,7 +107,8 @@ project "IL"
 		defines
 		{
 			"IL_PLATFORM_WINDOWS",
-			"IL_BUILD_DLL"
+			"IL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands

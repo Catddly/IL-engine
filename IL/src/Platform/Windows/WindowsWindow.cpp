@@ -4,6 +4,8 @@
 #include "IL/Events/MouseEvent.h"
 #include "IL/Events/ApplicationEvent.h"
 
+#include <glad/glad.h>
+
 namespace IL
 {
 
@@ -41,7 +43,7 @@ namespace IL
 		{
 			// TODO : glfwTerminate on system shutdown
 			int success = glfwInit();
-			IL_CORE_ASSERT(success, "Could not initialize GLFW!");
+			IL_CORE_ASSERT(success, "Failed to initialize GLFW!");
 			// set error callback
 			glfwSetErrorCallback(ErrorCallback);
 
@@ -50,6 +52,10 @@ namespace IL
 
 		m_Window = glfwCreateWindow((int)props.width, (int)props.height, props.titles.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_Window);
+
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		IL_CORE_ASSERT(status, "Failed to initialize glad!");
+
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
 
