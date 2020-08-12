@@ -21,9 +21,12 @@ namespace IL
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
+<<<<<<< HEAD
 
 		inline static Application& GetApplication() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnKeyPressed(KeyPressedEvent& e);
@@ -34,8 +37,11 @@ namespace IL
 		bool m_ShowWindowTrace = false;
 
 		LayerStack m_LayerStack;
+<<<<<<< HEAD
 	private:
 		static Application* s_Instance;  // we only need one application
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	};
 
 	// To be define in client

@@ -8,8 +8,11 @@ namespace IL
 {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+<<<<<<< HEAD
 	Application* Application::s_Instance = nullptr;
 
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	Application::Application()
 	{
 		IL_CORE_ASSERT(!s_Instance, "Already had one application!");
@@ -63,13 +66,19 @@ namespace IL
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+<<<<<<< HEAD
 		layer->OnAttach();
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
+<<<<<<< HEAD
 		overlay->OnAttach();
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	}
 
 	bool Application::OnWindowClose(WindowCloseEvent& e)

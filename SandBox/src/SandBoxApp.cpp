@@ -22,7 +22,10 @@ public:
 	SandBox()
 	{
 		PushLayer(new ExampleLayer());
+<<<<<<< HEAD
 		PushOverlay(new IL::ImGuiLayer());
+=======
+>>>>>>> cb6b5c1e64e11bf787d931c5eaf05ffaec344d0c
 	}
 
 	~SandBox()
