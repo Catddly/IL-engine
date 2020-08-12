@@ -5,7 +5,10 @@
 #include <stdio.h>
 
 #include "IL/Application.h"
+#include "IL/Layer.h"
 #include "IL/Log.h"
+
+#include "IL/ImGui/ImGuiLayer.h"
 
 // -------------EntryPoint---------------
 

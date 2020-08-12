@@ -47,6 +47,8 @@ namespace IL
 		{
 			return GetCategoryFlags() & cat;
 		}
+
+		inline bool IsHandled() { return m_Handled; }
 	protected:
 		bool m_Handled = false;
 	};

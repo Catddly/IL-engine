@@ -14,6 +14,7 @@ project "SandBox"
 	location "SandBox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir    ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -37,7 +38,6 @@ project "SandBox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -47,25 +47,33 @@ project "SandBox"
 
 	filter "configurations:Debug"
 		defines "IL_DEBUG"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "IL_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "IL_DIST"
+		runtime "Release"
 		optimize "On"
 
 IncludeDir = { }
-IncludeDir["GLFW"] = "IL/vendor/GLFW/include"
+IncludeDir["GLFW"] =  "IL/vendor/GLFW/include"
+IncludeDir["glad"] =  "IL/vendor/glad/include"
+IncludeDir["ImGui"] = "IL/vendor/imgui"
 
 include "IL/vendor/GLFW"
+include "IL/vendor/glad"
+include "IL/vendor/imgui"
 
 project "IL"
 	location "IL"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir	  ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -83,24 +91,28 @@ project "IL"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
 	{
 		"GLFW",
+		"glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
 		{
 			"IL_PLATFORM_WINDOWS",
-			"IL_BUILD_DLL"
+			"IL_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 		postbuildcommands
@@ -114,13 +126,16 @@ project "IL"
 			"IL_DEBUG",
 			"IL_ENABLE_ASSERTS"
 		}
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "IL_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "IL_DIST"
+		runtime "Release"
 		optimize "On"
 

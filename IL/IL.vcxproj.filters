@@ -37,6 +37,12 @@
     <ClInclude Include="src\IL\Events\MouseEvent.h">
       <Filter>IL\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\IL\Layer.h">
+      <Filter>IL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IL\LayerStack.h">
+      <Filter>IL</Filter>
+    </ClInclude>
     <ClInclude Include="src\IL\Log.h">
       <Filter>IL</Filter>
     </ClInclude>
@@ -47,9 +53,17 @@
       <Filter>Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\ilpch.h" />
+    <ClInclude Include="src\IL\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\IL\Application.cpp">
+      <Filter>IL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IL\Layer.cpp">
+      <Filter>IL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IL\LayerStack.cpp">
       <Filter>IL</Filter>
     </ClCompile>
     <ClCompile Include="src\IL\Log.cpp">
@@ -59,5 +73,7 @@
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\ilpch.cpp" />
+    <ClCompile Include="src\IL\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ImGuiOpenGLRenderer.cpp" />
   </ItemGroup>
 </Project>
