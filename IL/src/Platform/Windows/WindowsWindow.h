@@ -23,6 +23,7 @@ namespace IL
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override { return m_Data.VSync; }
 
+		inline void* GetNativeWindow() const override { return m_Window; }
 	private:
 		virtual void Init(const WindowProps& props);  // initialize the window
 		virtual void Shutdown();                      // close the window

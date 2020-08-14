@@ -4,6 +4,8 @@
 
 #include <glad/glad.h>
 
+#include "IL/Input.h"
+
 namespace IL						
 {
 
