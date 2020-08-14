@@ -1,5 +1,6 @@
 workspace "IL"
 	architecture "x64"
+	startproject "SandBox"
 
 	configurations 
 	{
@@ -65,9 +66,13 @@ IncludeDir["GLFW"] =  "IL/vendor/GLFW/include"
 IncludeDir["glad"] =  "IL/vendor/glad/include"
 IncludeDir["ImGui"] = "IL/vendor/imgui"
 
-include "IL/vendor/GLFW"
-include "IL/vendor/glad"
-include "IL/vendor/imgui"
+group "Dependencies"
+
+	include "IL/vendor/GLFW"
+	include "IL/vendor/glad"
+	include "IL/vendor/imgui"
+
+group ""
 
 project "IL"
 	location "IL"
@@ -117,7 +122,7 @@ project "IL"
 
 		postbuildcommands
 		{
-			("{COPY} %{cfg.buildtarget.relpath}  ../bin/" .. outputdir .. "/SandBox")
+			("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
 		}
 
 	filter "configurations:Debug"
