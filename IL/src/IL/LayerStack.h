@@ -26,7 +26,7 @@ namespace IL
 
 	private:
 		Layers m_Layers;
-		Layers::iterator m_LayerInsert;
+		unsigned int m_LayerInsertIndex = 0;
 	};
 
 }

@@ -8,12 +8,12 @@ namespace IL
 	class IL_API Input
 	{
 	public:
-		static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-		static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
+		inline static bool IsKeyPressed(int keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
+		inline static bool IsMouseButtonPressed(int button) { return s_Instance->IsMouseButtonPressedImpl(button); }
 
-		static std::pair<float, float> GetMousePos() { return s_Instance->GetMousePosImpl(); }
-		static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
-		static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+		inline static std::pair<float, float> GetMousePos() { return s_Instance->GetMousePosImpl(); }
+		inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
+		inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
 	protected:
 		// interface to implement in different platform
 		virtual bool IsKeyPressedImpl(int keycode) = 0;

@@ -5,14 +5,19 @@ class ExampleLayer : public IL::Layer
 public:
 	ExampleLayer() : Layer("Example") {}
 
-	void OnUpdate() override 
+	void OnUpdate() override
 	{
-		//IL_INFO("Example Layer : OnUpdate()");
+		if (IL::Input::IsMouseButtonPressed(IL_MOUSE_BUTTON_1))
+			IL_INFO("Mouse 1 is pressed!");
 	}
 
 	void OnEvent(IL::Event& e) override 
 	{
-		//IL_TRACE("Layer:{0} {1}", GetName(), e);
+		if (e.GetEventType() == IL::EventType::KeyPressed)
+		{
+			IL::KeyPressedEvent& event = (IL::KeyPressedEvent&)e;
+			IL_TRACE("{0}", (char)event.GetKeyCode());
+		}
 	}
 };
 

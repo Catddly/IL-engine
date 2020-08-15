@@ -6,8 +6,6 @@ namespace IL
 
 	LayerStack::LayerStack()
 	{
-		// set the iterator to the top of the layer
-		m_LayerInsert = m_Layers.begin();
 	}
 
 	LayerStack::~LayerStack()
@@ -19,7 +17,8 @@ namespace IL
 	void LayerStack::PushLayer(Layer* layer)
 	{
 		// push to the top of the layers
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
+		m_Layers.emplace(m_Layers.begin() + m_LayerInsertIndex, layer);
+		m_LayerInsertIndex++;
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
@@ -36,7 +35,7 @@ namespace IL
 		if (it != m_Layers.end())
 		{
 			m_Layers.erase(it);
-			m_LayerInsert--;
+			m_LayerInsertIndex--;
 		}
 	}
 

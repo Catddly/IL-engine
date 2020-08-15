@@ -6,7 +6,9 @@
 
 namespace IL
 {
+#ifdef IL_PLATFORM_WINDOWS
 	Input* Input::s_Instance = new WindowsInput();
+#endif
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
