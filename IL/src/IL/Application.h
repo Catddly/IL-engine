@@ -6,6 +6,8 @@
 #include "Events/KeyEvent.h"
 #include "LayerStack.h"
 
+#include "ImGui/ImGuiLayer.h"
+
 namespace IL
 {
 
@@ -33,7 +35,8 @@ namespace IL
 		bool m_Running = true;
 		bool m_ShowWindowTrace = false;
 
-		LayerStack m_LayerStack;
+		LayerStack  m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer;
 	private:
 		static Application* s_Instance;  // we only need one application
 	};

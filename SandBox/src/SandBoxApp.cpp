@@ -1,5 +1,7 @@
 #include <IL.h>
 
+#include "imgui.h"
+
 class ExampleLayer : public IL::Layer
 {
 public:
@@ -7,17 +9,20 @@ public:
 
 	void OnUpdate() override
 	{
-		if (IL::Input::IsMouseButtonPressed(IL_MOUSE_BUTTON_1))
-			IL_INFO("Mouse 1 is pressed!");
+	}
+
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Hello! Test!");
+		ImGui::Text("Hello World!");
+		ImGui::ArrowButton("1", 1);
+		ImGui::ArrowButton("2", 2);
+		ImGui::ArrowButton("3", 3);
+		ImGui::End();
 	}
 
 	void OnEvent(IL::Event& e) override 
 	{
-		if (e.GetEventType() == IL::EventType::KeyPressed)
-		{
-			IL::KeyPressedEvent& event = (IL::KeyPressedEvent&)e;
-			IL_TRACE("{0}", (char)event.GetKeyCode());
-		}
 	}
 };
 
@@ -27,7 +32,6 @@ public:
 	SandBox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new IL::ImGuiLayer());
 	}
 
 	~SandBox()

@@ -15,23 +15,12 @@ namespace IL
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void OnAttach();
-		void OnDeatch();
-		void OnUpdate();
-		void OnEvent(Event& e);
+		virtual void OnAttach() override;
+		virtual void OnDeatch() override;
+		virtual void OnImGuiRender() override;
 
-	private:
-		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
-		bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& e);
-		bool OnMouseScrolledEvent(MouseScrolledEvent& e);
-		bool OnMouseMovedEvent(MouseMovedEvent& e);
-
-		bool OnWindowResizedEvent(WindowResizeEvent& e);
-
-		bool OnKeyTypedEvent(KeyTypedEvent& e);
-		bool OnKeyReleasedEvent(KeyReleaseEvent& e);
-		bool OnKeyPressedEvent(KeyPressedEvent& e);
-
+		void Begin();
+		void End();
 	private:
 		float m_Time = 0.0f;
 	};

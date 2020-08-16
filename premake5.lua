@@ -119,7 +119,8 @@ project "SandBox"
 	{
 		"IL/vendor/spdlog/include",
 		"IL/src",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.ImGui}"
 	}
 
 	links
