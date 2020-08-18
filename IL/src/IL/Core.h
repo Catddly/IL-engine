@@ -1,13 +1,17 @@
 #pragma once
 
 #ifdef IL_PLATFORM_WINDOWS
-	#ifdef IL_BUILD_DLL
-		#define IL_API __declspec(dllexport)
+	#ifdef IL_DYNAMIC_LINK
+		#ifdef IL_BUILD_DLL
+			#define IL_API __declspec(dllexport)
+		#else
+			#define IL_API __declspec(dllimport)
+		#endif
 	#else
-		#define IL_API __declspec(dllimport)
+		#define IL_API
 	#endif
 #else
-	#error IL only support windows!
+#error IL only support windows!
 #endif
 
 #ifdef IL_ENABLE_ASSERTS
