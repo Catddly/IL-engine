@@ -13,12 +13,9 @@ public:
 
 	void OnImGuiRender() override
 	{
-		ImGui::Begin("Hello! Test!");
-		ImGui::Text("Hello World!");
-		ImGui::ArrowButton("1", 1);
-		ImGui::ArrowButton("2", 2);
-		ImGui::ArrowButton("3", 3);
-		ImGui::End();
+		//ImGui::Begin("Hello! Test!");
+		//ImGui::Text("Hello World!");
+		//ImGui::End();
 	}
 
 	void OnEvent(IL::Event& e) override 

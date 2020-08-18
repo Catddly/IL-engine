@@ -39,6 +39,8 @@ namespace IL
 		ImGuiLayer* m_ImGuiLayer;
 	private:
 		static Application* s_Instance;  // we only need one application
+
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
 	};
 
 	// To be define in client

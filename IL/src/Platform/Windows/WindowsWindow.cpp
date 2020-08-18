@@ -1,10 +1,11 @@
 #include "ilpch.h"
 #include "WindowsWindow.h"
+
 #include "IL/Events/KeyEvent.h"
 #include "IL/Events/MouseEvent.h"
 #include "IL/Events/ApplicationEvent.h"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace IL
 {
@@ -41,20 +42,19 @@ namespace IL
 
 		if (!m_GLFWInitialized)
 		{
-			// TODO : glfwTerminate on system shutdown
 			int success = glfwInit();
 			IL_CORE_ASSERT(success, "Failed to initialize GLFW!");
-			// set error callback
+			// set glfwError callback
 			glfwSetErrorCallback(ErrorCallback);
 
 			m_GLFWInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow((int)props.width, (int)props.height, props.titles.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
 
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		IL_CORE_ASSERT(status, "Failed to initialize glad!");
+		// create context for OpenGL
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -160,7 +160,7 @@ namespace IL
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enable)

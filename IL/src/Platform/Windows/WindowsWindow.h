@@ -2,7 +2,7 @@
 
 #include "IL/Window.h"
 
-#include <GLFW/glfw3.h>
+#include "IL/Renderer/GraphicContext.h"
 
 namespace IL
 {
@@ -29,6 +29,7 @@ namespace IL
 		virtual void Shutdown();                      // close the window
 	private:
 		GLFWwindow* m_Window;
+		GraphicContext* m_Context;
 		
 		struct WindowData
 		{
