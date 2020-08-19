@@ -8,6 +8,8 @@
 
 #include "ImGui/ImGuiLayer.h"
 
+#include "IL/Renderer/Shader.h"
+
 namespace IL
 {
 
@@ -28,6 +30,7 @@ namespace IL
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnKeyPressed(KeyPressedEvent& e);
 
 		std::unique_ptr<Window> m_Window;
@@ -41,6 +44,7 @@ namespace IL
 		static Application* s_Instance;  // we only need one application
 
 		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 	};
 
 	// To be define in client

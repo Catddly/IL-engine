@@ -49,6 +49,36 @@ namespace IL
 
 		unsigned int indices[3] = { 0, 1, 2 };
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+		// create shader
+		std::string vertexShader = R"(
+            #version 460 core
+
+			layout(location = 0) in vec3 a_Position;			
+
+			out vec3 v_Position;			
+
+			void main()
+			{
+				v_Position = a_Position * 2.0;
+				gl_Position = vec4(a_Position * 2.0, 1.0);
+			}	
+		)";
+
+		std::string fragmentShader = R"(
+            #version 460 core
+
+			layout(location = 0) out vec4 color;			
+
+			in vec3 v_Position;			
+
+			void main()
+			{
+				color = vec4((v_Position + 1.0) * 0.5, 1.0);
+			}	
+		)";
+
+		m_Shader.reset(new Shader(vertexShader, fragmentShader));
 	}
 
 	Application::~Application()
@@ -62,6 +92,8 @@ namespace IL
 			// draw call on every frame
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
+
+			m_Shader->Bind();
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 			for (Layer* layer : m_LayerStack)
@@ -84,6 +116,7 @@ namespace IL
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(IL_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<KeyPressedEvent>(IL_BIND_EVENT_FN(Application::OnKeyPressed));
+		dispatcher.Dispatch<WindowResizeEvent>(IL_BIND_EVENT_FN(Application::OnWindowResize));
 
 		if (m_ShowWindowTrace)
 		{
@@ -119,9 +152,14 @@ namespace IL
 		return true;
 	}
 
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{	
+		return false;
+	}
+
 	bool Application::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetKeyCode() == 256)
+		if (e.GetKeyCode() == 256 /* esc */)
 		{
 			WindowCloseEvent e;
 			OnWindowClose(e);
