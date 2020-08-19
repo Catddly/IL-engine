@@ -117,7 +117,7 @@ namespace IL
 		glUseProgram(m_Program);
 	}
 
-	void Shader::UnBind() const
+	void Shader::Unbind() const
 	{
 		glUseProgram(0);
 	}
