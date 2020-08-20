@@ -11,11 +11,6 @@ namespace IL
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
-		// Initialize draw call data of OpenGL
-		// VertexArray
-		//glGenVertexArrays(1, &m_VertexArray);
-		//glBindVertexArray(m_VertexArray);
-
 		glGenBuffers(1, &m_RendererID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		// send the vertices data from CPU to GPU
@@ -35,13 +30,6 @@ namespace IL
 	void OpenGLVertexBuffer::Unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
-
-	void OpenGLVertexBuffer::Run() const
-	{
-		glEnableVertexAttribArray(0);
-		// explain the data to the GPU
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
