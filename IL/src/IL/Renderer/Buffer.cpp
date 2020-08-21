@@ -11,9 +11,9 @@ namespace IL
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::NONE:
+		case RendererAPI::API::None:
 			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
-		case RenderAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 
@@ -25,9 +25,9 @@ namespace IL
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RenderAPI::NONE:
+		case RendererAPI::API::None:
 			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
-		case RenderAPI::OpenGL:
+		case RendererAPI::API::OpenGL:
 			return new OpenGLIndexBuffer(indices, count);
 		}
 
