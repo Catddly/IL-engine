@@ -78,7 +78,7 @@ namespace IL
 			CalOffsetAndStrike();
 		}
 
-		inline const std::vector<BufferElement>& GetElements() { return m_Elements; }
+		inline const std::vector<BufferElement>& GetElements() const { return m_Elements; }
 		inline uint32_t GetStrike() const { return m_Strike; }
 
 		std::vector<BufferElement>::iterator       begin()       { return m_Elements.begin(); }
