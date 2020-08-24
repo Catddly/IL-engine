@@ -2,15 +2,12 @@
 
 #include "Core.h"
 #include "Window.h"
+
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
+
 #include "LayerStack.h"
-
 #include "ImGui/ImGuiLayer.h"
-
-#include "IL/Renderer/Shader.h"
-#include "IL/Renderer/VertexArray.h"
-#include "IL/Renderer/Camera/Camera.h"
 
 namespace IL
 {
@@ -44,10 +41,6 @@ namespace IL
 		ImGuiLayer* m_ImGuiLayer;
 	private:
 		static Application* s_Instance;  // we only need one application
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_VertexArray; // it contains the vertexBuffers and indexBuffer
-		std::shared_ptr<Camera> m_Camera;
 	};
 
 	// To be define in client

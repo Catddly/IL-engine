@@ -13,6 +13,14 @@
 #include "IL/MouseButtonCodes.h"
 #include "IL/ImGui/ImGuiLayer.h"
 
+// -------------Renderer-----------------
+
+#include "Il/Renderer/VertexArray.h"
+#include "IL/Renderer/Renderer.h"
+#include "IL/Renderer/RenderCommand.h"
+#include "IL/Renderer/Camera/Camera.h"
+#include "Il/Renderer/Shader.h"
+
 // -------------EntryPoint---------------
 
 #include "IL/EntryPoint.h"
