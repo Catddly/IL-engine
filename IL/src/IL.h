@@ -8,13 +8,17 @@
 #include "IL/Layer.h"
 #include "IL/Log.h"
 
+#include "IL/Core/Timer.h"
+
 #include "IL/Input.h"
 #include "IL/KeyCodes.h"
 #include "IL/MouseButtonCodes.h"
+
 #include "IL/ImGui/ImGuiLayer.h"
 
 // -------------Renderer-----------------
 
+#include "IL/Renderer/Buffer.h"
 #include "Il/Renderer/VertexArray.h"
 #include "IL/Renderer/Renderer.h"
 #include "IL/Renderer/RenderCommand.h"

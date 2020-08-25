@@ -29,5 +29,4 @@ namespace IL
 	{
 		glfwSwapBuffers(m_WindowHandle);
 	}
-
 }

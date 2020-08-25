@@ -9,6 +9,8 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
+#include "IL/Core/Timer.h"
+
 namespace IL
 {
 
@@ -31,7 +33,7 @@ namespace IL
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnKeyPressed(KeyPressedEvent& e);
-
+	private:
 		std::unique_ptr<Window> m_Window;
 
 		bool m_Running = true;
@@ -39,7 +41,10 @@ namespace IL
 
 		LayerStack  m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
-	private:
+
+		Timer timer;
+		float m_LastFrameTime;
+
 		static Application* s_Instance;  // we only need one application
 	};
 

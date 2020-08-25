@@ -3,6 +3,8 @@
 #include "IL/Core.h"
 #include "IL/Events/Event.h"
 
+#include "IL/Core/Timer.h"
+
 namespace IL
 {
 
@@ -14,7 +16,7 @@ namespace IL
 
 		virtual void OnAttach() {}
 		virtual void OnDeatch() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timer deltaTime) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}
 

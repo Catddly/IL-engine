@@ -4,6 +4,8 @@
 
 #include "IL/Renderer/GraphicContext.h"
 
+#include <GLFW/glfw3.h>
+
 namespace IL
 {
 
@@ -19,7 +21,7 @@ namespace IL
 		inline UINT GetWidth() const override  { return m_Data.width; }
 		inline UINT GetHeight() const override { return m_Data.height; }
 
-		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallbackFunc = callback; }
 		void SetVSync(bool enable) override;
 		bool IsVSync() const override { return m_Data.VSync; }
 
@@ -37,7 +39,7 @@ namespace IL
 			UINT width, height;
 			bool VSync;
 
-			EventCallbackFn EventCallback;
+			EventCallbackFn EventCallbackFunc;
 		};
 
 		WindowData m_Data;

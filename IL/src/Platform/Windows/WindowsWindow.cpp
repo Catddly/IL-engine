@@ -6,6 +6,7 @@
 #include "IL/Events/ApplicationEvent.h"
 
 #include "Platform/OpenGL/OpenGLContext.h"
+#include "GLFW/glfw3.h"
 
 namespace IL
 {
@@ -68,7 +69,7 @@ namespace IL
 				data.height = height;
 
 				WindowResizeEvent e(width, height);
-				data.EventCallback(e);
+				data.EventCallbackFunc(e);
 			});
 
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
@@ -76,7 +77,7 @@ namespace IL
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				MouseMovedEvent e((float)xPos, (float)yPos);
-				data.EventCallback(e);
+				data.EventCallbackFunc(e);
 			});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
@@ -84,7 +85,7 @@ namespace IL
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				WindowCloseEvent e;
-				data.EventCallback(e);
+				data.EventCallbackFunc(e);
 			});
 
 		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
@@ -92,7 +93,7 @@ namespace IL
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				MouseScrolledEvent e((float)xOffset, (float)yOffset);
-				data.EventCallback(e);
+				data.EventCallbackFunc(e);
 			});
 
 		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -104,19 +105,19 @@ namespace IL
 				case GLFW_PRESS:
 				{
 					KeyPressedEvent e(key, 0);
-					data.EventCallback(e);
+					data.EventCallbackFunc(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
 					KeyReleaseEvent e(key);
-					data.EventCallback(e);
+					data.EventCallbackFunc(e);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
 					KeyPressedEvent e(key, 1);
-					data.EventCallback(e);
+					data.EventCallbackFunc(e);
 					break;
 				}
 				}
@@ -127,7 +128,7 @@ namespace IL
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
 				KeyTypedEvent e(keycode);
-				data.EventCallback(e);
+				data.EventCallbackFunc(e);
 			});
 
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -139,13 +140,13 @@ namespace IL
 				case GLFW_PRESS:
 				{
 					MouseButtonPressedEvent e(button);
-					data.EventCallback(e);
+					data.EventCallbackFunc(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
 					MouseButtonReleasedEvent e(button);
-					data.EventCallback(e);
+					data.EventCallbackFunc(e);
 					break;
 				}
 				}

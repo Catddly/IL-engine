@@ -5,6 +5,10 @@
 #include "IL/Input.h"
 #include "IL/Renderer/RenderCommand.h"
 
+#include "IL/Renderer/GraphicContext.h"
+
+#include <GLFW/glfw3.h>
+
 namespace IL						
 {
 
@@ -31,8 +35,12 @@ namespace IL
 	{
 		while (m_Running)
 		{
+			float time = (float)glfwGetTime();
+			Timer timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			// render ImGui
 			m_ImGuiLayer->Begin();
