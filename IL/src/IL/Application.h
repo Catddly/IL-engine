@@ -44,7 +44,7 @@ namespace IL
 
 		Timer timer;
 		float m_LastFrameTime;
-
+		
 		static Application* s_Instance;  // we only need one application
 	};
 

@@ -18,7 +18,7 @@ namespace IL
 		static void BeginScene(const std::shared_ptr<Camera>& camera);
 		static void EndScene();
 
-		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& VertexArray);
+		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& VertexArray, const glm::mat4& transform);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
