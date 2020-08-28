@@ -17,6 +17,8 @@ namespace IL
 
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
+		void UploadUniformInt(const std::string& name, const int& values);
+
 		void UploadUniformFloat(const std::string& name, const float& values);
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
 		void UploadUniformFloat3(const std::string& name, const glm::vec3& values);

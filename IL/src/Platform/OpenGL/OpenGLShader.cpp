@@ -129,6 +129,12 @@ namespace IL
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
+	void OpenGLShader::UploadUniformInt(const std::string& name, const int& values)
+	{
+		GLint location = glGetUniformLocation(m_Program, name.c_str());
+		glUniform1i(location, values);
+	}
+
 	void OpenGLShader::UploadUniformFloat(const std::string& name, const float& values)
 	{
 		GLint location = glGetUniformLocation(m_Program, name.c_str());

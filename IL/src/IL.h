@@ -23,7 +23,8 @@
 #include "IL/Renderer/Renderer.h"
 #include "IL/Renderer/RenderCommand.h"
 #include "IL/Renderer/Camera/Camera.h"
-#include "Il/Renderer/Shader.h"
+#include "IL/Renderer/Shader.h"
+#include "IL/Renderer/Texture.h"
 
 // -------------EntryPoint---------------
 
