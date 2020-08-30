@@ -8,6 +8,7 @@
 #include "IL/Layer.h"
 #include "IL/Log.h"
 
+#include "IL/Core/TimeStep.h"
 #include "IL/Core/Timer.h"
 
 #include "IL/Input.h"

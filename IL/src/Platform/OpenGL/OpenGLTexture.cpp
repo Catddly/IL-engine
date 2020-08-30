@@ -19,7 +19,7 @@ namespace IL
 		m_Width = width;
 		m_Height = height;
 
-		GLenum internalFormat = 0, format = 0; // internalFormat used to store image data in the GPU, format used to explain the storaged data
+		GLenum internalFormat = 0, format = 0; // internalFormat used to store image data in the GPU, format used to explain the stored data
 		if (channels == 4)
 		{
 			internalFormat = GL_RGBA8;

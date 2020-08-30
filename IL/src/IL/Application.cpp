@@ -36,7 +36,7 @@ namespace IL
 		while (m_Running)
 		{
 			float time = (float)glfwGetTime();
-			Timer timestep = time - m_LastFrameTime;
+			TimeStep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			for (Layer* layer : m_LayerStack)

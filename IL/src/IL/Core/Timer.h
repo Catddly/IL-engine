@@ -1,20 +1,38 @@
 #pragma once
 
+#include "IL/Core.h"
+
 namespace IL
 {
 
 	class Timer
 	{
 	public:
-		Timer(float time = 0.0f)
-			:m_Time(time) {}
+		Timer(const std::string& description)
+		{
+			m_TimerStartTime = std::chrono::high_resolution_clock::now();
+			m_Description = description;
+		}
 
-		operator float() const { return m_Time; }
+		~Timer()
+		{
+			Stop();
+		}
 
-		float GetSeconds() const { return m_Time; }
-		float GetMilliseconds() const { return m_Time * 1000.0f; }
+		void Stop() const
+		{
+			auto now = std::chrono::high_resolution_clock::now();
+
+			auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_TimerStartTime).time_since_epoch().count();
+			auto end = std::chrono::time_point_cast<std::chrono::microseconds>(now).time_since_epoch().count();
+
+			auto duration = end - start;
+			IL_CORE_INFO("{0} duration: ms({1}), us({2})", m_Description, duration * 0.001, duration);
+		}
 	private:
-		float m_Time;
+		std::chrono::time_point<std::chrono::high_resolution_clock> m_TimerStartTime;
+		std::string m_Description;
 	};
 
 }
+

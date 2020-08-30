@@ -9,7 +9,7 @@
 #include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
-#include "IL/Core/Timer.h"
+#include "IL/Core/TimeStep.h"
 
 namespace IL
 {
@@ -42,7 +42,7 @@ namespace IL
 		LayerStack  m_LayerStack;
 		ImGuiLayer* m_ImGuiLayer;
 
-		Timer timer;
+		TimeStep timer;
 		float m_LastFrameTime;
 		
 		static Application* s_Instance;  // we only need one application
