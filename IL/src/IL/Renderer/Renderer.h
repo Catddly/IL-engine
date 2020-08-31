@@ -20,6 +20,8 @@ namespace IL
 
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& VertexArray, const glm::mat4& transform);
 
+		static void Init();
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
 		struct SceneData

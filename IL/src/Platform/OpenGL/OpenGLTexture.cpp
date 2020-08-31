@@ -30,7 +30,7 @@ namespace IL
 			internalFormat = GL_RGB8;
 			format = GL_RGB;
 		}
-		IL_CORE_ASSERT(internalFormat & format, "Unknown format!");
+		IL_CORE_ASSERT(internalFormat & format, "Unknown texture format!");
 
 		// create texture and create space inside GPU to storage image data
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);

@@ -45,85 +45,19 @@ public:
 		indexBuffer.reset((IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t))));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
-		// create shader
-		std::string vertexShaderTex = R"(
-            #version 460 core
 
-			layout(location = 0) in vec3 a_Position;		
-			layout(location = 1) in vec2 a_TexCoord;		
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
-			}	
-		)";
-
-		std::string fragmentShaderTex = R"(
-            #version 460 core
-
-			layout(location = 0) out vec4 color;
-	
-			uniform sampler2D u_Texture;
-
-			in vec2 v_TexCoord;
-
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}	
-		)";
-
-		m_ShaderTex.reset(Shader::Create(vertexShaderTex, fragmentShaderTex));
-
+		m_ShaderTex.reset(Shader::Create("assets/shaders/Texture.glsl"));
 		m_Texture = Texture2D::Create("assets/textures/ILLmew.png");
 		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTex)->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTex)->UploadUniformInt("u_Texture", 0 /* slot id */);
 
-		/// <summary>
-		/// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// </summary>
-
-		std::string vertexShader = R"(
-            #version 460 core
-
-			layout(location = 0) in vec3 a_Position;		
-			layout(location = 1) in vec2 a_TexCoord;		
-
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
-
-			out vec2 v_TexCoord;
-
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0f);
-			}	
-		)";
-
-		std::string fragmentShader = R"(
-            #version 460 core
-
-			layout(location = 0) out vec4 color;
-	
-			uniform vec3 u_SquareColor;
-
-			in vec2 v_TexCoord;
-
-			void main()
-			{
-				color = vec4(u_SquareColor, 1.0f);
-			}	
-		)";
-
-		m_Shader.reset(Shader::Create(vertexShader, fragmentShader));
+		m_Shader.reset(Shader::Create("assets/shaders/Square.glsl"));
 		m_Shader->Bind();
+
+		m_ShaderTexAlpha.reset(Shader::Create("assets/shaders/TextureAlpha.glsl"));
+		m_Texture1 = Texture2D::Create("assets/textures/design.png");
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTexAlpha)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTexAlpha)->UploadUniformInt("u_Texture", 0/* slot id */);
 	}
 
 	void OnUpdate(TimeStep dt) override
@@ -155,6 +89,7 @@ public:
 
 		glm::mat4 transformTex = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 slightTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.05f, 0.05f, 0.0f));
 
 		for (int x = -10; x < 10; x++)
 		{
@@ -169,6 +104,8 @@ public:
 		
 		m_Texture->Bind();
 		Renderer::Submit(m_ShaderTex, m_VertexArray, transformTex);
+		m_Texture1->Bind();
+		Renderer::Submit(m_ShaderTexAlpha, m_VertexArray, transformTex);
 
 		Renderer::EndScene();
 	}
@@ -185,14 +122,14 @@ public:
 	}
 
 private:
-	Ref<Shader> m_ShaderTex, m_Shader;
+	Ref<Shader> m_ShaderTex, m_Shader, m_ShaderTexAlpha;
 	Ref<VertexArray> m_VertexArray; // it contains the vertexBuffers and indexBuffer
 	Ref<Camera> m_Camera;
 
 	glm::vec3 m_CameraPosition;
 	float m_CameraRotation;
 
-	Ref<Texture2D> m_Texture;
+	Ref<Texture2D> m_Texture, m_Texture1;
 
 	float camMoveSpeed = 2.0f;
 	float camRotationSpeed = 100.0f;

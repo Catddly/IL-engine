@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "IL/Input.h"
+#include "IL/Renderer/Renderer.h"
 #include "IL/Renderer/RenderCommand.h"
 
 #include "IL/Renderer/GraphicContext.h"
@@ -21,6 +22,8 @@ namespace IL
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(IL_BIND_EVENT_FN(Application::OnEvent));
+
+		Renderer::Init();
 
 		// initialize ImGui
 		m_ImGuiLayer = new ImGuiLayer;
