@@ -12,12 +12,14 @@ namespace IL
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& path);
 		~OpenGLShader();
 
 		void Bind() const override;
 		void Unbind() const override;
+
+		const std::string& GetName() const override { return m_Name; }
 
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
@@ -33,6 +35,7 @@ namespace IL
 		void Compile(const std::unordered_map<GLenum, std::string>& sourceMap);
 	private:
 		uint32_t m_Program;
+		std::string m_Name;
 	};
 
 }

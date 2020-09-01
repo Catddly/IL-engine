@@ -25,8 +25,8 @@ namespace IL
 	}
 
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
-		:m_Program(0)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		:m_Program(0), m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sourceMap;
 		sourceMap[GL_VERTEX_SHADER] = vertexSrc;
@@ -39,6 +39,13 @@ namespace IL
 		std::string shaderSource = ReadFile(path);
 		auto sourceMap = PreProcess(shaderSource);
 		Compile(sourceMap);
+
+		// Extract name from the filepath
+		size_t lastSlash = path.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		size_t lastDot = path.rfind('.');
+		size_t count = lastDot == std::string::npos ? path.size() - lastSlash : lastDot - lastSlash;
+		m_Name = path.substr(lastSlash, count);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -143,7 +150,9 @@ namespace IL
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& sourceMap)
 	{
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(sourceMap.size());
+		IL_CORE_ASSERT(sourceMap.size() <= 2, "Exceed maximum size of shaders!");
+		std::array<GLenum, 2> glShaderIDs;
+		uint32_t shaderIDIndex = 0;
 
 		for (const auto& shaderCource : sourceMap)
 		{
@@ -180,7 +189,7 @@ namespace IL
 
 			}
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[shaderIDIndex++] = shader;
 		}
 
 		// Link our program

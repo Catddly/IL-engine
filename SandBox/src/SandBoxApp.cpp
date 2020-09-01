@@ -46,18 +46,18 @@ public:
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 
-		m_ShaderTex.reset(Shader::Create("assets/shaders/Texture.glsl"));
+		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Texture2D::Create("assets/textures/ILLmew.png");
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTex)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTex)->UploadUniformInt("u_Texture", 0 /* slot id */);
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Texture"))->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0 /* slot id */);
 
-		m_Shader.reset(Shader::Create("assets/shaders/Square.glsl"));
-		m_Shader->Bind();
+		m_ShaderLibrary.Load("assets/shaders/Square.glsl");
+		m_ShaderLibrary.Get("Square")->Bind();
 
-		m_ShaderTexAlpha.reset(Shader::Create("assets/shaders/TextureAlpha.glsl"));
+		m_ShaderLibrary.Load("assets/shaders/TextureAlpha.glsl");
 		m_Texture1 = Texture2D::Create("assets/textures/design.png");
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTexAlpha)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderTexAlpha)->UploadUniformInt("u_Texture", 0/* slot id */);
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("TextureAlpha"))->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("TextureAlpha"))->UploadUniformInt("u_Texture", 0/* slot id */);
 	}
 
 	void OnUpdate(TimeStep dt) override
@@ -97,15 +97,15 @@ public:
 			{
 				glm::vec3 pos = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-				Renderer::Submit(m_Shader, m_VertexArray, transform);
-				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_SquareColor", m_SquareColor);
+				Renderer::Submit(m_ShaderLibrary.Get("Square"), m_VertexArray, transform);
+				std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Square"))->UploadUniformFloat3("u_SquareColor", m_SquareColor);
 			}
 		}
 		
 		m_Texture->Bind();
-		Renderer::Submit(m_ShaderTex, m_VertexArray, transformTex);
+		Renderer::Submit(m_ShaderLibrary.Get("Texture"), m_VertexArray, transformTex);
 		m_Texture1->Bind();
-		Renderer::Submit(m_ShaderTexAlpha, m_VertexArray, transformTex);
+		Renderer::Submit(m_ShaderLibrary.Get("TextureAlpha"), m_VertexArray, transformTex);
 
 		Renderer::EndScene();
 	}
@@ -117,12 +117,13 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(IL::Event& e) override 
+	void OnEvent(Event& e) override 
 	{
 	}
 
 private:
-	Ref<Shader> m_ShaderTex, m_Shader, m_ShaderTexAlpha;
+	ShaderLibrary m_ShaderLibrary;
+
 	Ref<VertexArray> m_VertexArray; // it contains the vertexBuffers and indexBuffer
 	Ref<Camera> m_Camera;
 
