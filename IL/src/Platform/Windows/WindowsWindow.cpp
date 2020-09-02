@@ -58,7 +58,7 @@ namespace IL
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
+		SetVSync(false);
 
 		// set GLFW callback function
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

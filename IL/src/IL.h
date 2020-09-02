@@ -17,6 +17,8 @@
 
 #include "IL/ImGui/ImGuiLayer.h"
 
+#include "IL/Input/OrthographicCameraController.h"
+
 // -------------Renderer-----------------
 
 #include "IL/Renderer/Buffer.h"

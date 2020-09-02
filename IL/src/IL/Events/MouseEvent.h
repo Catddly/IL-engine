@@ -5,6 +5,19 @@
 namespace IL
 {
 
+	class IL_API MouseButtonEvent : public Event
+	{
+	public:
+		inline int GetMouseButton() const { return m_Button; }
+
+		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+	protected:
+		MouseButtonEvent(int button)
+			: m_Button(button) {}
+
+		int m_Button;
+	};
+
 	class IL_API MouseMovedEvent : public Event
 	{
 	public:
@@ -47,19 +60,6 @@ namespace IL
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
 		float m_XOffset, m_YOffset;
-	};
-
-	class IL_API MouseButtonEvent : public Event
-	{
-	public:
-		inline int GetMouseButton() const { return m_Button; }
-
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
-	protected:
-		MouseButtonEvent(int button)
-			: m_Button(button) {}
-
-		int m_Button;
 	};
 
 	class IL_API MouseButtonPressedEvent : public MouseButtonEvent

@@ -14,10 +14,8 @@ using namespace IL;
 class ExampleLayer : public Layer
 {
 public:
-	ExampleLayer() : Layer("Example"), m_CameraPosition({0.0f, 0.0f, 0.0f}), m_CameraRotation(0.0f)
+	ExampleLayer() : Layer("Example"), m_CameraController(std::make_shared<OrthographicCameraController>(1280.0f / 720.0f, true))
 	{
-		m_Camera = Camera::CreateOrtho(-1.6f, 1.6f, -0.9f, 0.9f);
-
 		// Initialize draw call data of OpenGL
 		// VertexArray
 		m_VertexArray.reset(VertexArray::Create());
@@ -62,30 +60,12 @@ public:
 
 	void OnUpdate(TimeStep dt) override
 	{
-		//IL_TRACE("dt: {0}, {1}", dt.GetSeconds(), dt.GetMilliseconds());
-
-		if (Input::IsKeyPressed(IL_KEY_A))
-			m_CameraPosition.x -= camMoveSpeed * dt;
-		else if (Input::IsKeyPressed(IL_KEY_D))
-			m_CameraPosition.x += camMoveSpeed * dt;
-
-		if (Input::IsKeyPressed(IL_KEY_W))
-			m_CameraPosition.y += camMoveSpeed * dt;
-		else if (Input::IsKeyPressed(IL_KEY_S))
-			m_CameraPosition.y -= camMoveSpeed * dt;
-
-		if (Input::IsKeyPressed(IL_KEY_Q))
-			m_CameraRotation -= camRotationSpeed * dt;
-		else if (Input::IsKeyPressed(IL_KEY_E))
-			m_CameraRotation += camRotationSpeed * dt;
+		m_CameraController->OnUpdate(dt);
 
 		RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 		RenderCommand::Clear();
 
-		Renderer::BeginScene(m_Camera);
-
-		m_Camera->SetPosition(m_CameraPosition);
-		m_Camera->SetRotation(m_CameraRotation);
+		Renderer::BeginScene(m_CameraController->GetCamera());
 
 		glm::mat4 transformTex = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.5f));
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -119,21 +99,16 @@ public:
 
 	void OnEvent(Event& e) override 
 	{
+		m_CameraController->OnEvent(e);
 	}
 
 private:
 	ShaderLibrary m_ShaderLibrary;
 
 	Ref<VertexArray> m_VertexArray; // it contains the vertexBuffers and indexBuffer
-	Ref<Camera> m_Camera;
-
-	glm::vec3 m_CameraPosition;
-	float m_CameraRotation;
+	Ref<OrthographicCameraController> m_CameraController;
 
 	Ref<Texture2D> m_Texture, m_Texture1;
-
-	float camMoveSpeed = 2.0f;
-	float camRotationSpeed = 100.0f;
 
 	glm::vec3 m_SquareColor = glm::vec3(0.4f);
 };
