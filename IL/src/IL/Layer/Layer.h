@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IL/Core.h"
+#include "IL/Core/Core.h"
 #include "IL/Events/Event.h"
 
 #include "IL/Core/TimeStep.h"

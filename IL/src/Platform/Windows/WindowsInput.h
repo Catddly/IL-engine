@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IL/Input.h"
+#include "IL/Input/Input.h"
 
 namespace IL
 {

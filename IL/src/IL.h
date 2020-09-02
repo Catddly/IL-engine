@@ -5,15 +5,15 @@
 #include <stdio.h>
 
 #include "IL/Application.h"
-#include "IL/Layer.h"
+#include "IL/Layer/Layer.h"
 #include "IL/Log.h"
 
 #include "IL/Core/TimeStep.h"
 #include "IL/Core/Timer.h"
 
-#include "IL/Input.h"
-#include "IL/KeyCodes.h"
-#include "IL/MouseButtonCodes.h"
+#include "IL/Input/Input.h"
+#include "IL/Input/KeyCodes.h"
+#include "IL/Input/MouseButtonCodes.h"
 
 #include "IL/ImGui/ImGuiLayer.h"
 

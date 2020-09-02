@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Core.h"
+#include "IL/Core/Core.h"
 #include "Window.h"
 
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
 
-#include "LayerStack.h"
+#include "IL/Layer/LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
 #include "IL/Core/TimeStep.h"

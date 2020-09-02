@@ -2,7 +2,7 @@
 
 #include "Application.h"
 
-#include "IL/Input.h"
+#include "IL/Input/Input.h"
 #include "IL/Renderer/Renderer.h"
 #include "IL/Renderer/RenderCommand.h"
 

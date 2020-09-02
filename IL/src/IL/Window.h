@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Il/Core.h"
+#include "IL/Core/Core.h"
 #include "IL/Events/Event.h"
 
 namespace IL
