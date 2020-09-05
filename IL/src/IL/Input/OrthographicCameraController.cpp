@@ -46,9 +46,9 @@ namespace IL
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowResizeEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
 		dispatcher.Dispatch<MouseScrolledEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
-		dispatcher.Dispatch<MouseButtonPressedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMousePressed));
-		dispatcher.Dispatch<MouseButtonReleasedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseReleased));
-		dispatcher.Dispatch<MouseMovedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseMoved));
+		//dispatcher.Dispatch<MouseButtonPressedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMousePressed));
+		//dispatcher.Dispatch<MouseButtonReleasedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseReleased));
+		//dispatcher.Dispatch<MouseMovedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseMoved));
 	}
 
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)

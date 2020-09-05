@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IL/Window.h"
+#include "IL/Core/Window.h"
 
 #include "IL/Renderer/GraphicContext.h"
 

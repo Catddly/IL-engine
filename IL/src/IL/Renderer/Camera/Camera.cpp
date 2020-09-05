@@ -2,7 +2,7 @@
 #include "Camera.h"
 
 #include "IL/Renderer/Camera/OrthographicCamera.h"
-#include "IL/Application.h"
+#include "IL/Core/Application.h"
 
 namespace IL
 {

@@ -4,9 +4,9 @@
 
 #include <stdio.h>
 
-#include "IL/Application.h"
+#include "IL/Core/Application.h"
 #include "IL/Layer/Layer.h"
-#include "IL/Log.h"
+#include "IL/Core/Log.h"
 
 #include "IL/Core/TimeStep.h"
 #include "IL/Core/Timer.h"
@@ -31,6 +31,6 @@
 
 // -------------EntryPoint---------------
 
-#include "IL/EntryPoint.h"
+#include "IL/Core/EntryPoint.h"
 
 // --------------------------------------

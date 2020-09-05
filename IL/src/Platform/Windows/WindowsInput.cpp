@@ -1,7 +1,7 @@
 #include "ilpch.h"
 #include "WindowsInput.h"
 
-#include "IL/Application.h"
+#include "IL/Core/Application.h"
 #include "GLFW/glfw3.h"
 
 namespace IL
@@ -23,7 +23,7 @@ namespace IL
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
-
+	
 	std::pair<float, float> WindowsInput::GetMousePosImpl()
 	{
 		auto window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow());

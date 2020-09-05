@@ -10,9 +10,9 @@ namespace IL
 	public:
 		// dispatch the renderCommand to the API which we are using
 		// RenderCommand do not do multiple things
-		inline static void SetViewPortSize(UINT width, UINT height)
+		inline static void SetViewPortSize(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 		{
-			s_RendererAPI->SetViewPortSize(width, height);
+			s_RendererAPI->SetViewPortSize(x, y, width, height);
 		}
 
 		inline static void SetClearColor(glm::vec4 color)

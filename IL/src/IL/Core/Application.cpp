@@ -42,8 +42,11 @@ namespace IL
 			TimeStep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+			if (!m_Minimized)
+			{
+				for (Layer* layer : m_LayerStack)
+					layer->OnUpdate(timestep);
+			}
 
 			// render ImGui
 			m_ImGuiLayer->Begin();
@@ -100,7 +103,14 @@ namespace IL
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{	
-		RenderCommand::SetViewPortSize(e.GetWidth(), e.GetHeight());
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		m_Minimized = false;
 		return false;
 	}
 

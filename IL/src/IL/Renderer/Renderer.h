@@ -18,6 +18,8 @@ namespace IL
 		static void BeginScene(const std::shared_ptr<Camera>& camera);
 		static void EndScene();
 
+		static void OnWindowResize(uint32_t width, uint32_t height);
+
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& VertexArray, const glm::mat4& transform);
 
 		static void Init();

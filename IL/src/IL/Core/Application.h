@@ -3,11 +3,11 @@
 #include "IL/Core/Core.h"
 #include "Window.h"
 
-#include "Events/ApplicationEvent.h"
-#include "Events/KeyEvent.h"
+#include "IL/Events/ApplicationEvent.h"
+#include "IL/Events/KeyEvent.h"
 
 #include "IL/Layer/LayerStack.h"
-#include "ImGui/ImGuiLayer.h"
+#include "IL/ImGui/ImGuiLayer.h"
 
 #include "IL/Core/TimeStep.h"
 
@@ -37,6 +37,7 @@ namespace IL
 		std::unique_ptr<Window> m_Window;
 
 		bool m_Running = true;
+		bool m_Minimized = false;
 		bool m_ShowWindowTrace = false;
 
 		LayerStack  m_LayerStack;
