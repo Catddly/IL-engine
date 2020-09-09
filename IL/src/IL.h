@@ -29,8 +29,3 @@
 #include "IL/Renderer/Shader.h"
 #include "IL/Renderer/Texture.h"
 
-// -------------EntryPoint---------------
-
-#include "IL/Core/EntryPoint.h"
-
-// --------------------------------------

@@ -16,6 +16,7 @@ namespace IL
 
 		virtual void OnAttach() {}
 		virtual void OnDeatch() {}
+
 		virtual void OnUpdate(TimeStep deltaTime) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}

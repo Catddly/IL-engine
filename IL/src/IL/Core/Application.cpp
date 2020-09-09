@@ -32,6 +32,10 @@ namespace IL
 
 	Application::~Application()
 	{
+		for (Layer* layer : m_LayerStack)
+		{
+			layer->OnDeatch();
+		}
 	}
 
 	void Application::Run()

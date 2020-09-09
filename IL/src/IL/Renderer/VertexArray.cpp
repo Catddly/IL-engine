@@ -7,14 +7,14 @@
 namespace IL
 {
 
-	IL::VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:
 			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
 		case RendererAPI::API::OpenGL:
-			return new OpenGLVertexArray();
+			return std::make_shared<OpenGLVertexArray>();
 		}
 
 		IL_CORE_ASSERT(false, "Wrong API selection!");

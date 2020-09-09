@@ -1,13 +1,21 @@
 #include <IL.h>
 
 #include "Platform/OpenGL/OpenGlShader.h"
+
 #include "imgui.h"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "Sandbox2D.h"
 
 #include <future>
 #include <thread>
 #include <mutex>
+
+// -------------EntryPoint---------------
+#include "IL/Core/EntryPoint.h"
+// --------------------------------------
 
 using namespace IL;
 
@@ -18,7 +26,7 @@ public:
 	{
 		// Initialize draw call data of OpenGL
 		// VertexArray
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 
 		// one square
 		float vertices[5 * 4] = {
@@ -28,7 +36,7 @@ public:
 			 0.5f, -0.5f,  0.0f, 1.0f, 0.0f
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		BufferLayout layout =
 		{
 			{ ShaderDataType::Float3, "a_Position" },
@@ -40,9 +48,8 @@ public:
 		// IndexBuffer
 		uint32_t indices[6] = { 0, 1, 2, 0, 3, 1 };
 		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset((IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t))));
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
-
 
 		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Texture2D::Create("assets/textures/ILLmew.png");
@@ -113,58 +120,57 @@ private:
 	glm::vec3 m_SquareColor = glm::vec3(0.4f);
 };
 
-class TestLayer : public Layer
-{
-public:
-	TestLayer() : Layer("TimerLayer")
-	{
-		Timer timer("TestLayer::TestLayer()");
-
-		//Count();
-		//std::async(std::launch::async, Count);
-
-		std::thread t1(Count);
-		std::thread t2(Count);
-		std::thread t3(Count);
-
-		t1.join();
-		t2.join();
-		t3.join();
-
-		IL_CORE_TRACE("TestLayer print: {0}", m_Counter);
-	}
-
-	static void Count()
-	{
-		mutex.lock();
-		for (int i = 0; i < 10000000; i++)
-		{
-			m_Counter += 2;
-		}
-		mutex.unlock();
-	}
-
-private:
-	static long long int m_Counter;
-	static std::mutex mutex;
-};
-
-long long int TestLayer::m_Counter = 0;
-std::mutex TestLayer::mutex;
+//class TestLayer : public Layer
+//{
+//public:
+//	TestLayer() : Layer("TimerLayer")
+//	{
+//		Timer timer("TestLayer::TestLayer()");
+//
+//		//Count();
+//		//std::async(std::launch::async, Count);
+//
+//		std::thread t1(Count);
+//		std::thread t2(Count);
+//		std::thread t3(Count);
+//
+//		t1.join();
+//		t2.join();
+//		t3.join();
+//
+//		IL_CORE_TRACE("TestLayer print: {0}", m_Counter);
+//	}
+//
+//	static void Count()
+//	{
+//		mutex.lock();
+//		for (int i = 0; i < 10000000; i++)
+//		{
+//			m_Counter += 2;
+//		}
+//		mutex.unlock();
+//	}
+//
+//private:
+//	static long long int m_Counter;
+//	static std::mutex mutex;
+//};
+//
+//long long int TestLayer::m_Counter = 0;
+//std::mutex TestLayer::mutex;
 
 class SandBox : public IL::Application
 {
 public: 
 	SandBox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
 		//PushOverlay(new TestLayer());
+		PushLayer(new Sandbox2DLayer());
 	}
-
 	~SandBox()
 	{
 	}
-
 };
 
 IL::Application* IL::CreateApplication()
