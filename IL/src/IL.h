@@ -24,6 +24,7 @@
 #include "IL/Renderer/Buffer.h"
 #include "Il/Renderer/VertexArray.h"
 #include "IL/Renderer/Renderer.h"
+#include "IL/Renderer/Renderer2D.h"
 #include "IL/Renderer/RenderCommand.h"
 #include "IL/Renderer/Camera/Camera.h"
 #include "IL/Renderer/Shader.h"

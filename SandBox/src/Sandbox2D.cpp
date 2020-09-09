@@ -4,7 +4,6 @@
 
 #include "imgui.h"
 
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 Sandbox2DLayer::Sandbox2DLayer()
@@ -14,34 +13,6 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
-	m_VertexArray = VertexArray::Create();
-	// one square
-	float vertices[4 * 3] = {
-		-0.5f, -0.5f,  0.0f,
-		 0.5f,  0.5f,  0.0f,
-		-0.5f,  0.5f,  0.0f,
-		 0.5f, -0.5f,  0.0f
-	};
-	Ref<VertexBuffer> vertexBuffer;
-	vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
-	BufferLayout layout =
-	{
-		{ ShaderDataType::Float3, "a_Position" }
-	};
-	vertexBuffer->SetLayout(layout);
-
-	// Initialize draw call data of OpenGL
-	// VertexArray
-	m_VertexArray->AddVertexBuffer(vertexBuffer);
-
-	// IndexBuffer
-	uint32_t indices[6] = { 0, 1, 2, 0, 3, 1 };
-	Ref<IndexBuffer> indexBuffer;
-	indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-	m_VertexArray->SetIndexBuffer(indexBuffer);
-
-	m_ShaderLibrary.Load("assets/shaders/Square.glsl");
-	m_SquareShader = m_ShaderLibrary.Get("Square");
 }
 
 void Sandbox2DLayer::OnDeatch()
@@ -55,12 +26,9 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 	RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 	RenderCommand::Clear();
 
-	Renderer::BeginScene(m_CameraController->GetCamera());
+	Renderer2D::BeginScene(m_CameraController->GetCamera());
 
-	m_SquareShader->Bind();
-	std::dynamic_pointer_cast<OpenGLShader>(m_SquareShader)->UploadUniformFloat4("u_SquareColor", m_SquareColor);
-
-	Renderer::Submit(m_SquareShader, m_VertexArray);
+	Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 2.0f, 1.25f }, m_SquareColor);
 
 	Renderer::EndScene();
 }

@@ -17,10 +17,6 @@ public:
 	virtual void OnImGuiRender() override;
 	virtual void OnEvent(Event& e) override;
 private:
-	ShaderLibrary m_ShaderLibrary;
-	Ref<Shader> m_SquareShader;
-
-	Ref<VertexArray> m_VertexArray; // it contains the vertexBuffers and indexBuffer
 	Ref<OrthographicCameraController> m_CameraController;
 
 	glm::vec4 m_SquareColor = glm::vec4(0.3f, 0.3f, 0.9f, 1.0f);
