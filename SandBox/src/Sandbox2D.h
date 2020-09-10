@@ -19,6 +19,9 @@ public:
 private:
 	Ref<OrthographicCameraController> m_CameraController;
 
+	Ref<Texture2D> m_Texture;
+
 	glm::vec4 m_SquareColor = glm::vec4(0.3f, 0.3f, 0.9f, 1.0f);
 	float m_SquareRotation = 0.0f;
+	float m_Depth = 0.0f;
 };

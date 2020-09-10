@@ -36,6 +36,7 @@ namespace IL
 		{
 			layer->OnDeatch();
 		}
+		Renderer::Shutdown();
 	}
 
 	void Application::Run()

@@ -18,6 +18,8 @@ namespace IL
 	{
 	public:
 		Application();
+		Application(const Application&) = delete;
+		Application& operator=(const Application&) = delete;
 		virtual ~Application();
 
 		void Run();

@@ -11,6 +11,7 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
+	m_Texture = Texture2D::Create("assets/textures/ILLmew.png");
 }
 
 void Sandbox2DLayer::OnDeatch()
@@ -27,7 +28,8 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 	Renderer2D::BeginScene(m_CameraController->GetCamera());
 
 	Renderer2D::DrawQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
-	Renderer2D::DrawQuad({ 1.0f, 0.0f }, 0.0f, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
+	Renderer2D::DrawQuad({ 1.0f, 1.5f }, 0.0f, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
+	Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, 0.0f, { 5.0f, 5.0f }, m_Texture);
 
 	Renderer::EndScene();
 }
@@ -37,6 +39,7 @@ void Sandbox2DLayer::OnImGuiRender()
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor), ImGuiColorEditFlags_DisplayHSV);
 	ImGui::SliderFloat("Rotation", &m_SquareRotation, 0.0f, 360.0f);
+	ImGui::SliderFloat("Depth", &m_Depth, -0.999f, 1.0f);
 	ImGui::End();
 }
 

@@ -12,6 +12,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "IL/Events/MouseEvent.h"
+
 namespace IL
 {
 
@@ -23,6 +25,8 @@ namespace IL
 	ImGuiLayer::~ImGuiLayer()
 	{
 	}
+
+
 
 	void ImGuiLayer::OnAttach()
 	{
@@ -63,6 +67,12 @@ namespace IL
 		ImGui::DestroyContext();
 	}
 
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<MouseScrolledEvent>(IL_BIND_EVENT_FN(ImGuiLayer::OnMouseScrolled));
+	}
+
 	void ImGuiLayer::OnImGuiRender()
 	{
 		static bool show = true;
@@ -96,6 +106,11 @@ namespace IL
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
+	}
+
+	bool ImGuiLayer::OnMouseScrolled(MouseScrolledEvent& e)
+	{
+		return false;
 	}
 
 }

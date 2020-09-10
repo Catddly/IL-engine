@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "Camera/OrthographicCamera.h"
+#include "Texture.h"
 
 namespace IL
 {
@@ -20,6 +21,8 @@ namespace IL
 
 		static void DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const glm::vec4& color);
 		static void DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color);
+		static void DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f));
+		static void DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color = glm::vec4(1.0f));
 	private:
 		struct SceneData
 		{

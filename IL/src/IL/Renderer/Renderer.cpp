@@ -38,4 +38,10 @@ namespace IL
 		Renderer2D::Init();
 	}
 
+	void Renderer::Shutdown()
+	{
+		delete m_SceneData;
+		Renderer2D::Shutdown();
+	}
+
 }

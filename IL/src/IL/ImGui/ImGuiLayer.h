@@ -17,10 +17,13 @@ namespace IL
 
 		virtual void OnAttach() override;
 		virtual void OnDeatch() override;
+		virtual void OnEvent(Event& e) override;
 		virtual void OnImGuiRender() override;
 
 		void Begin();
 		void End();
+	private:
+		bool OnMouseScrolled(MouseScrolledEvent& e);
 	private:
 		float m_Time = 0.0f;
 	};
