@@ -1,7 +1,5 @@
 #include "Sandbox2D.h"
 
-#include "Platform/OpenGL/OpenGlShader.h"
-
 #include "imgui.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -28,7 +26,8 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 
 	Renderer2D::BeginScene(m_CameraController->GetCamera());
 
-	Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 2.0f, 1.25f }, m_SquareColor);
+	Renderer2D::DrawQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
+	Renderer2D::DrawQuad({ 1.0f, 0.0f }, 0.0f, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
 
 	Renderer::EndScene();
 }
@@ -36,7 +35,8 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 void Sandbox2DLayer::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
-	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor));
+	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor), ImGuiColorEditFlags_DisplayHSV);
+	ImGui::SliderFloat("Rotation", &m_SquareRotation, 0.0f, 360.0f);
 	ImGui::End();
 }
 

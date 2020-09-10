@@ -3,14 +3,13 @@
 
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Platform/OpenGL/OpenGlShader.h"
 #include "RenderCommand.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 namespace IL
 {
+	Renderer2D::SceneData* Renderer2D::s_SceneData = new Renderer2D::SceneData;
 	
 	struct Renderer2DStorage
 	{
@@ -60,9 +59,9 @@ namespace IL
 
 	void Renderer2D::BeginScene(const Ref<OrthographicCamera>& camera)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->UploadUniformMat4("u_ViewProjection", camera->GetViewProjectionMatrix());
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->UploadUniformMat4("u_Transform", glm::mat4(1.0f));
+		s_SceneData->m_ViewProjection = camera->GetViewProjectionMatrix();
+		s_Data->m_SquareShader->Bind();
+		s_Data->m_SquareShader->SetMat4("u_ViewProjection", s_SceneData->m_ViewProjection);
 	}
 
 	void Renderer2D::EndScene()
@@ -75,17 +74,20 @@ namespace IL
 		RenderCommand::SetViewPortSize(0, 0, width, height);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
 	{
-		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, color);
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), rotation, size, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
 	{
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->UploadUniformFloat4("u_SquareColor", color);
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->m_SquareShader)->UploadUniformMat4("u_Transform", scale);
+		s_Data->m_SquareShader->Bind();
+		s_Data->m_SquareShader->SetFloat4("u_SquareColor", color);
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // TRS
+		s_Data->m_SquareShader->SetMat4("u_Transform", transform);
 
 		s_Data->m_VertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->m_VertexArray);

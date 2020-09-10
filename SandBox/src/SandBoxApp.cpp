@@ -1,7 +1,5 @@
 #include <IL.h>
 
-#include "Platform/OpenGL/OpenGlShader.h"
-
 #include "imgui.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -53,16 +51,16 @@ public:
 
 		m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Texture2D::Create("assets/textures/ILLmew.png");
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Texture"))->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Texture"))->UploadUniformInt("u_Texture", 0 /* slot id */);
+		m_ShaderLibrary.Get("Texture")->Bind();
+		m_ShaderLibrary.Get("Texture")->SetInt("u_Texture", 0 /* slot id */);
 
 		m_ShaderLibrary.Load("assets/shaders/Square.glsl");
 		m_ShaderLibrary.Get("Square")->Bind();
 
 		m_ShaderLibrary.Load("assets/shaders/TextureAlpha.glsl");
 		m_Texture1 = Texture2D::Create("assets/textures/design.png");
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("TextureAlpha"))->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("TextureAlpha"))->UploadUniformInt("u_Texture", 0/* slot id */);
+		m_ShaderLibrary.Get("TextureAlpha")->Bind();
+		m_ShaderLibrary.Get("TextureAlpha")->SetInt("u_Texture", 0/* slot id */);
 	}
 
 	void OnUpdate(TimeStep dt) override
@@ -85,7 +83,7 @@ public:
 				glm::vec3 pos = glm::vec3(x * 0.11f, y * 0.11f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				Renderer::Submit(m_ShaderLibrary.Get("Square"), m_VertexArray, transform);
-				std::dynamic_pointer_cast<OpenGLShader>(m_ShaderLibrary.Get("Square"))->UploadUniformFloat3("u_SquareColor", m_SquareColor);
+				m_ShaderLibrary.Get("Square")->SetFloat3("u_SquareColor", m_SquareColor);
 			}
 		}
 		
