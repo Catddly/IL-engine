@@ -11,9 +11,9 @@ namespace IL
 {
 	struct Renderer2DStorage
 	{
-		Ref<VertexArray> m_VertexArray;
-		Ref<Shader> m_SquareShader;
-		Ref<Shader> m_TextureShader;
+		Ref<VertexArray> vertexArray;
+		Ref<Shader> shader;
+		Ref<Texture2D> whiteTexture;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -24,7 +24,7 @@ namespace IL
 	{
 		s_Data = new Renderer2DStorage();
 
-		s_Data->m_VertexArray = VertexArray::Create();
+		s_Data->vertexArray = VertexArray::Create();
 		// one square
 		float vertices[4 * 5] = {
 			-0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
@@ -43,18 +43,21 @@ namespace IL
 
 		// Initialize draw call data of OpenGL
 		// VertexArray
-		s_Data->m_VertexArray->AddVertexBuffer(vertexBuffer);
+		s_Data->vertexArray->AddVertexBuffer(vertexBuffer);
 
 		// IndexBuffer
 		uint32_t indices[6] = { 0, 1, 2, 0, 3, 1 };
 		Ref<IndexBuffer> indexBuffer;
 		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-		s_Data->m_VertexArray->SetIndexBuffer(indexBuffer);
+		s_Data->vertexArray->SetIndexBuffer(indexBuffer);
 
-		s_Data->m_SquareShader = Shader::Create("assets/shaders/Square.glsl");
-		s_Data->m_TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data->m_TextureShader->Bind();
-		s_Data->m_TextureShader->SetInt("u_Texture", 0);
+		s_Data->shader = Shader::Create("assets/shaders/Texture.glsl");
+		s_Data->shader->Bind();
+		s_Data->shader->SetInt("u_Texture", 0);
+
+		s_Data->whiteTexture = Texture2D::Create(1, 1);
+		uint32_t data = 0xffffffff;
+		s_Data->whiteTexture->SetData(&data, sizeof(uint32_t));
 	}
 
 	void Renderer2D::Shutdown()
@@ -66,16 +69,11 @@ namespace IL
 	void Renderer2D::BeginScene(const Ref<OrthographicCamera>& camera)
 	{
 		s_SceneData->m_ViewProjection = camera->GetViewProjectionMatrix();
-		s_Data->m_SquareShader->Bind();
-		s_Data->m_SquareShader->SetMat4("u_ViewProjection", s_SceneData->m_ViewProjection);
-
-		s_Data->m_TextureShader->Bind();
-		s_Data->m_TextureShader->SetMat4("u_ViewProjection", s_SceneData->m_ViewProjection);
+		s_Data->shader->SetMat4("u_ViewProjection", s_SceneData->m_ViewProjection);
 	}
 
 	void Renderer2D::EndScene()
 	{
-
 	}
 
 	void Renderer2D::OnWindowResize(uint32_t width, uint32_t height)
@@ -90,37 +88,38 @@ namespace IL
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
 	{
-		s_Data->m_SquareShader->Bind();
-		s_Data->m_SquareShader->SetFloat4("u_SquareColor", color);
+		s_Data->whiteTexture->Bind();
+
+		s_Data->shader->SetFloat4("u_Color", color);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
 			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // TRS
-		s_Data->m_SquareShader->SetMat4("u_Transform", transform);
+		s_Data->shader->SetMat4("u_Transform", transform);
 
-		s_Data->m_VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->m_VertexArray);
+		s_Data->vertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->vertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
 	{
-		DrawQuad(glm::vec3(position.x, position.y, 0.0f), rotation, size, texture, color);
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), rotation, size, texture, uvScaling, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
 	{
-		s_Data->m_TextureShader->Bind();
-		s_Data->m_TextureShader->SetFloat4("u_Color", color);
+		texture->Bind();
+
+		s_Data->shader->SetFloat4("u_Color", color);
+		s_Data->shader->SetFloat("u_UVScaling", uvScaling);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // TRS
-		s_Data->m_TextureShader->SetMat4("u_Transform", transform);
+		s_Data->shader->SetMat4("u_Transform", transform);
 
-		texture->Bind();
-
-		s_Data->m_VertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->m_VertexArray);
+		s_Data->vertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->vertexArray);
 	}
 
 }

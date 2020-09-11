@@ -14,7 +14,7 @@ namespace IL
 		case RendererAPI::API::None:
 			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+			return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		IL_CORE_ASSERT(false, "Wrong API selection!");
@@ -28,7 +28,7 @@ namespace IL
 		case RendererAPI::API::None:
 			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLIndexBuffer>(indices, count);
+			return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
 		IL_CORE_ASSERT(false, "Wrong API selection!");
