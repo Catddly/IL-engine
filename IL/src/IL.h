@@ -9,7 +9,7 @@
 #include "IL/Core/Log.h"
 
 #include "IL/Core/TimeStep.h"
-#include "IL/Core/Timer.h"
+#include "IL/Core/Profiler.h"
 
 #include "IL/Input/Input.h"
 #include "IL/Input/KeyCodes.h"
