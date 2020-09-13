@@ -30,6 +30,8 @@ namespace IL
 
 	void ImGuiLayer::OnAttach()
 	{
+		IL_PROFILE_FUNCTION();
+
 		// Setup ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -62,6 +64,8 @@ namespace IL
 
 	void ImGuiLayer::OnDeatch()
 	{
+		IL_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -81,6 +85,8 @@ namespace IL
 
 	void ImGuiLayer::Begin()
 	{
+		IL_PROFILE_FUNCTION();
+
 		// Start the ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -89,6 +95,8 @@ namespace IL
 
 	void ImGuiLayer::End()
 	{
+		IL_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::GetApplication();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());

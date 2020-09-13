@@ -36,7 +36,7 @@ namespace IL
 		bool OnWindowResize(WindowResizeEvent& e);
 		bool OnKeyPressed(KeyPressedEvent& e);
 	private:
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 
 		bool m_Running = true;
 		bool m_Minimized = false;

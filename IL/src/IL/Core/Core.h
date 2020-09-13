@@ -13,7 +13,7 @@
 		#define IL_API
 	#endif
 #else
-#error IL only support windows!
+    #error IL only support windows!
 #endif
 
 #ifdef IL_ENABLE_ASSERTS
@@ -32,6 +32,7 @@ namespace IL
 {
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
+
 	template<typename T, typename ... Args>
 	constexpr Scope<T> CreateScope(Args&& ... args)
 	{
@@ -40,6 +41,7 @@ namespace IL
 
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+
 	template<typename T, typename ... Args>
 	constexpr Ref<T> CreateRef(Args&& ... args)
 	{

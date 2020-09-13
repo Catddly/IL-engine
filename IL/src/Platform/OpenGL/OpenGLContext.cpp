@@ -15,6 +15,8 @@ namespace IL
 
 	void OpenGLContext::Init()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		IL_CORE_ASSERT(status, "Failed to initialize glad!");
@@ -27,6 +29,8 @@ namespace IL
 
 	void OpenGLContext::SwapBuffers()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_WindowHandle);
 	}
 }

@@ -29,27 +29,37 @@ namespace IL
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		IL_PROFILE_FUNCTION();
+
 		// Initialize draw call data of OpenGL
 		glGenVertexArrays(1, &m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		IL_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		IL_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
 	{
+		IL_PROFILE_FUNCTION();
+
 		IL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Empty vertexBuffer layout!");
 
 		glBindVertexArray(m_RendererID);
@@ -75,6 +85,8 @@ namespace IL
 
 	void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
 	{
+		IL_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 		m_IndexBuffer = indexBuffer;

@@ -22,6 +22,8 @@ namespace IL
 
 	void Renderer2D::Init()
 	{
+		IL_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 
 		s_Data->vertexArray = VertexArray::Create();
@@ -62,22 +64,29 @@ namespace IL
 
 	void Renderer2D::Shutdown()
 	{
+		IL_PROFILE_FUNCTION();
+
 		delete s_Data;
 		delete s_SceneData;
 	}
 
 	void Renderer2D::BeginScene(const Ref<OrthographicCamera>& camera)
 	{
+		IL_PROFILE_FUNCTION();
+
 		s_SceneData->m_ViewProjection = camera->GetViewProjectionMatrix();
 		s_Data->shader->SetMat4("u_ViewProjection", s_SceneData->m_ViewProjection);
 	}
 
 	void Renderer2D::EndScene()
 	{
+		IL_PROFILE_FUNCTION();
 	}
 
 	void Renderer2D::OnWindowResize(uint32_t width, uint32_t height)
 	{
+		IL_PROFILE_FUNCTION();
+
 		RenderCommand::SetViewPortSize(0, 0, width, height);
 	}
 
@@ -88,6 +97,8 @@ namespace IL
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
 	{
+		IL_PROFILE_FUNCTION();
+
 		s_Data->whiteTexture->Bind();
 
 		s_Data->shader->SetFloat4("u_Color", color);
@@ -108,6 +119,8 @@ namespace IL
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
 	{
+		IL_PROFILE_FUNCTION();
+
 		texture->Bind();
 
 		s_Data->shader->SetFloat4("u_Color", color);

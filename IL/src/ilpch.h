@@ -16,6 +16,7 @@
 #include <unordered_set>
 
 #include "IL/Core/Log.h"
+#include "IL/Debug/Profiler.h"
 
 #ifdef IL_PLATFORM_WINDOWS
 	#include <Windows.h>

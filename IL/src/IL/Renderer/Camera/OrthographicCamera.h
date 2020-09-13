@@ -9,7 +9,7 @@ namespace IL
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
-		void SetProjectionMat(float left, float right, float bottom, float top);
+		void SetProjectionMatrix(float left, float right, float bottom, float top);
 
 		virtual const glm::mat4& GetViewMatrix()	       const override { return m_ViewMatrix; }
 		virtual const glm::mat4& GetProjectionMatrix()	   const override { return m_ProjectionMatrix; }

@@ -18,23 +18,29 @@ namespace IL
 		IL_CORE_ASSERT("GLFW ERROR ({0}): {1}", errorCode, description);
 	}
 
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
-		return new WindowsWindow(props);
+		return CreateScope<WindowsWindow>(props);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		IL_PROFILE_FUNCTION();
+
 		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
 	{
+		IL_PROFILE_FUNCTION();
+
 		Shutdown();
 	}
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		IL_PROFILE_FUNCTION();
+
 		m_Data.title  = props.titles;
 		m_Data.width  = props.width;
 		m_Data.height = props.height;
@@ -58,7 +64,7 @@ namespace IL
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(false);
+		SetVSync(true);
 
 		// set GLFW callback function
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
@@ -155,17 +161,23 @@ namespace IL
 
 	void WindowsWindow::Shutdown()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_Window);
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enable)
 	{
+		IL_PROFILE_FUNCTION();
+
 		if (enable)
 			glfwSwapInterval(1);
 		else 

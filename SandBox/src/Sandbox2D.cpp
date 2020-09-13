@@ -11,28 +11,32 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
+	IL_PROFILE_FUNCTION();
+
 	m_Texture = Texture2D::Create("assets/textures/CheckerBoard.png");
 }
 
 void Sandbox2DLayer::OnDeatch()
 {
+	IL_PROFILE_FUNCTION();
 }
 
 void Sandbox2DLayer::OnUpdate(TimeStep dt)
 {
+	IL_PROFILE_FUNCTION();
 	{
-		PROFILER("Sandbox2DLayer::CameraUpdate");
+		IL_PROFILE_SCOPE("Sandbox2DLayer::CameraUpdate");
 		m_CameraController->OnUpdate(dt);
 	}
 
 	{
-		PROFILER("Sandbox2DLayer::Prep");
+		IL_PROFILE_SCOPE("Sandbox2DLayer::Prep");
 		RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 		RenderCommand::Clear();
 	}
 
 	{
-		PROFILER("Sandbox2DLayer::Renderer");
+		IL_PROFILE_SCOPE("Sandbox2DLayer::Renderer");
 		Renderer2D::BeginScene(m_CameraController->GetCamera());
 
 		Renderer2D::DrawQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
@@ -50,17 +54,6 @@ void Sandbox2DLayer::OnImGuiRender()
 	ImGui::SliderFloat("Rotation", &m_SquareRotation, 0.0f, 360.0f);
 	ImGui::SliderFloat("Depth", &m_Depth, -0.999f, 1.0f);
 	ImGui::SliderFloat("UV", &m_UVScaling, -10.0, 10.0f);
-	ImGui::End();
-
-	ImGui::Begin("Profiler");
-	for (const auto& result : Profiler::GetResults())
-	{
-		char label[50];
-		strcpy(label, "  %.3fms ");
-		strcat(label, result.Description);
-		ImGui::Text(label, result.Time);
-	}
-	Profiler::ClearResults();
 	ImGui::End();
 }
 

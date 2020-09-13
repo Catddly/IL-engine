@@ -15,7 +15,7 @@ namespace IL
 
 	void OrthographicCameraController::OnUpdate(TimeStep dt)
 	{
-		//IL_TRACE("dt: {0}, {1}", dt.GetSeconds(), dt.GetMilliseconds());
+		IL_PROFILE_FUNCTION();
 
 		if (Input::IsKeyPressed(IL_KEY_A))
 			m_Position.x -= m_CameraMoveSpeed * dt;
@@ -43,6 +43,8 @@ namespace IL
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		IL_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowResizeEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnWindowResize));
 		dispatcher.Dispatch<MouseScrolledEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
@@ -53,19 +55,23 @@ namespace IL
 
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)
 	{
+		IL_PROFILE_FUNCTION();
+
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera->SetProjectionMat(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_Camera->SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
 	}
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		IL_PROFILE_FUNCTION();
+
 		m_ZoomLevel -= e.GetYOffset() / 10.0f;
 
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.3f);
 		m_ZoomLevel = std::min(m_ZoomLevel, 3.0f);
 
-;		m_Camera->SetProjectionMat(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+;		m_Camera->SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
 	}
 

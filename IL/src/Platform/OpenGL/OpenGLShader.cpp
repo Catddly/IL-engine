@@ -28,6 +28,8 @@ namespace IL
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		:m_Program(0), m_Name(name)
 	{
+		IL_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sourceMap;
 		sourceMap[GL_VERTEX_SHADER] = vertexSrc;
 		sourceMap[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -36,6 +38,8 @@ namespace IL
 
 	OpenGLShader::OpenGLShader(const std::string& path)
 	{
+		IL_PROFILE_FUNCTION();
+
 		std::string shaderSource = ReadFile(path);
 		auto sourceMap = PreProcess(shaderSource);
 		Compile(sourceMap);
@@ -50,41 +54,57 @@ namespace IL
 
 	OpenGLShader::~OpenGLShader()
 	{
+		IL_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_Program);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		IL_PROFILE_FUNCTION();
+
 		glUseProgram(m_Program);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		IL_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, const int& value)
 	{
+		IL_PROFILE_FUNCTION();
+
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		IL_PROFILE_FUNCTION();
+
 		UploadUniformMat4(name, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, const float& value)
 	{
+		IL_PROFILE_FUNCTION();
+
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+		IL_PROFILE_FUNCTION();
+
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+		IL_PROFILE_FUNCTION();
+
 		UploadUniformFloat4(name, value);
 	}
 
@@ -126,6 +146,8 @@ namespace IL
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		IL_PROFILE_FUNCTION();
+
 		std::ifstream in(filepath, std::ios::in, std::ios::binary);
 		std::string data;
 
@@ -147,6 +169,8 @@ namespace IL
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		IL_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sourceMap;
 
 		const char* typeToken = "#type";
@@ -174,6 +198,8 @@ namespace IL
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& sourceMap)
 	{
+		IL_PROFILE_FUNCTION();
+
 		GLuint program = glCreateProgram();
 		IL_CORE_ASSERT(sourceMap.size() <= 2, "Exceed maximum size of shaders!");
 		std::array<GLenum, 2> glShaderIDs;

@@ -34,6 +34,8 @@ namespace IL
 
 	void Renderer::Init()
 	{
+		IL_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}
