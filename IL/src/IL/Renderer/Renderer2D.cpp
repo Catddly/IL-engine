@@ -90,12 +90,12 @@ namespace IL
 		RenderCommand::SetViewPortSize(0, 0, width, height);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		DrawQuad(glm::vec3(position.x, position.y, 0.0f), rotation, size, color);
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		IL_PROFILE_FUNCTION();
 
@@ -104,6 +104,49 @@ namespace IL
 		s_Data->shader->SetFloat4("u_Color", color);
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // T S
+		s_Data->shader->SetMat4("u_Transform", transform);
+
+		s_Data->vertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->vertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
+	{
+		DrawQuad(glm::vec3(position.x, position.y, 0.0f), size, texture, uvScaling, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
+	{
+		IL_PROFILE_FUNCTION();
+
+		texture->Bind();
+
+		s_Data->shader->SetFloat4("u_Color", color);
+		s_Data->shader->SetFloat("u_UVScaling", uvScaling);
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // T S
+		s_Data->shader->SetMat4("u_Transform", transform);
+
+		s_Data->vertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->vertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, rotation, size, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const glm::vec4& color)
+	{
+		IL_PROFILE_FUNCTION();
+
+		s_Data->whiteTexture->Bind();
+
+		s_Data->shader->SetFloat4("u_Color", color);
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f)); // TRS
 		s_Data->shader->SetMat4("u_Transform", transform);
@@ -112,12 +155,12 @@ namespace IL
 		RenderCommand::DrawIndexed(s_Data->vertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
 	{
-		DrawQuad(glm::vec3(position.x, position.y, 0.0f), rotation, size, texture, uvScaling, color);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, rotation, size, texture, uvScaling , color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const float& rotation, const glm::vec2& size, const Ref<Texture2D>& texture, const float& uvScaling /*= 1.0f*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
 	{
 		IL_PROFILE_FUNCTION();
 
