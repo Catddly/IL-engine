@@ -14,8 +14,10 @@ namespace IL
 		static void Init();
 		static void Shutdown();
 
-		static void BeginScene(const Ref<OrthographicCamera>& camera);
+		static void BeginScene(const Ref<OrthographicCamera>& camera, bool EnableBatchRendering = false);
 		static void EndScene();
+
+		static void Flush();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
@@ -31,7 +33,8 @@ namespace IL
 	private:
 		struct SceneData
 		{
-			glm::mat4 m_ViewProjection;
+			glm::mat4 ViewProjectionMatrix;
+			bool EnableBatchRendering = false;
 		};
 
 		static SceneData* s_SceneData;

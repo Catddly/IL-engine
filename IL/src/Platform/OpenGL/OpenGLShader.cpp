@@ -73,6 +73,13 @@ namespace IL
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetBool(const std::string& name, const bool& value)
+	{
+		IL_PROFILE_FUNCTION();
+
+		UploadUniformBool(name, value);
+	}
+
 	void OpenGLShader::SetInt(const std::string& name, const int& value)
 	{
 		IL_PROFILE_FUNCTION();
@@ -106,6 +113,12 @@ namespace IL
 		IL_PROFILE_FUNCTION();
 
 		UploadUniformFloat4(name, value);
+	}
+
+	void OpenGLShader::UploadUniformBool(const std::string& name, const bool& values)
+	{
+		GLint location = glGetUniformLocation(m_Program, name.c_str());
+		glUniform1i(location, (int)values);
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)

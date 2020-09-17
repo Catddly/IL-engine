@@ -6,15 +6,28 @@
 
 namespace IL
 {
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
+		switch (Renderer::GetAPI())
+		{
+			case RendererAPI::API::None:
+				IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLVertexBuffer>(size);
+		}
+
+		IL_CORE_ASSERT(false, "Wrong API selection!");
+		return nullptr;
+	}
 
 	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:
-			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
-		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLVertexBuffer>(vertices, size);
+			case RendererAPI::API::None:
+				IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		IL_CORE_ASSERT(false, "Wrong API selection!");
@@ -25,10 +38,10 @@ namespace IL
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:
-			IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
-		case RendererAPI::API::OpenGL:
-			return CreateRef<OpenGLIndexBuffer>(indices, count);
+			case RendererAPI::API::None:
+				IL_CORE_ASSERT(false, "IL engine don't support null API now!"); return nullptr;
+			case RendererAPI::API::OpenGL:
+				return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
 		IL_CORE_ASSERT(false, "Wrong API selection!");

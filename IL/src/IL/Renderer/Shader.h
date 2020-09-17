@@ -14,6 +14,7 @@ namespace IL
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetBool(const std::string& name, const bool& value) = 0;
 		virtual void SetInt(const std::string& name, const int& value) = 0;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) = 0;
 		virtual void SetFloat(const std::string& name, const float& value) = 0;

@@ -15,6 +15,7 @@ namespace IL
 
 	void Renderer::EndScene()
 	{
+		Renderer2D::EndScene();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -37,7 +38,7 @@ namespace IL
 		IL_PROFILE_FUNCTION();
 
 		RenderCommand::Init();
-		Renderer2D::Init();
+		//Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()

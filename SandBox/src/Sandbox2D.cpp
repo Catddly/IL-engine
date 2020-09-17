@@ -37,11 +37,12 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 
 	{
 		IL_PROFILE_SCOPE("Sandbox2DLayer::Renderer");
-		Renderer2D::BeginScene(m_CameraController->GetCamera());
+		Renderer2D::BeginScene(m_CameraController->GetCamera(), true);
 
-		Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
-		Renderer2D::DrawQuad({ 1.0f, 1.5f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture, m_UVScaling);
+		//Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
+		Renderer2D::DrawQuad({ 0.3f, -0.4f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
+		Renderer2D::DrawQuad({ 0.3f, 0.4f }, { 1.0f, 0.7f }, m_SquareColor);
+		//Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture, m_UVScaling);
 
 		Renderer::EndScene();
 	}
