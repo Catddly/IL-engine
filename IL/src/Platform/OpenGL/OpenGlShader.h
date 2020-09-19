@@ -23,6 +23,7 @@ namespace IL
 
 		virtual void SetBool(const std::string& name, const bool& value) override;
 		virtual void SetInt(const std::string& name, const int& value) override;
+		virtual void SetIntArray(const std::string& name, const int* value, uint32_t count) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) override;
 		virtual void SetFloat(const std::string& name, const float& value) override;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) override;
@@ -31,6 +32,7 @@ namespace IL
 		void UploadUniformBool(const std::string& name, const bool& values);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 		void UploadUniformInt(const std::string& name, const int& values);
+		void UploadUniformIntArray(const std::string& name, const int* value, uint32_t count);
 		void UploadUniformFloat(const std::string& name, const float& values);
 		void UploadUniformFloat2(const std::string& name, const glm::vec2& values);
 		void UploadUniformFloat3(const std::string& name, const glm::vec3& values);

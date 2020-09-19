@@ -13,7 +13,8 @@ void Sandbox2DLayer::OnAttach()
 {
 	IL_PROFILE_FUNCTION();
 
-	m_Texture = Texture2D::Create("assets/textures/CheckerBoard.png");
+	m_Texture1 = Texture2D::Create("assets/textures/CheckerBoard.png");
+	m_Texture2 = Texture2D::Create("assets/textures/ILLmew.png");
 }
 
 void Sandbox2DLayer::OnDeatch()
@@ -42,7 +43,8 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 		//Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, m_SquareRotation, { 2.0f, 1.25f }, m_SquareColor);
 		Renderer2D::DrawQuad({ 0.3f, -0.4f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
 		Renderer2D::DrawQuad({ 0.3f, 0.4f }, { 1.0f, 0.7f }, m_SquareColor);
-		//Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture, m_UVScaling);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 4.0f, 4.0f }, m_Texture1, m_UVScaling);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_UVScaling);
 
 		Renderer::EndScene();
 	}

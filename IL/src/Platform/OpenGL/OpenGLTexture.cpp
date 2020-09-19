@@ -96,4 +96,10 @@ namespace IL
 
 		glBindTextureUnit(slot /* slot id */, m_RendererID);
 	}
+
+	bool OpenGLTexture2D::operator==(const Texture& rhs) const
+	{
+		return m_RendererID == static_cast<const OpenGLTexture2D&>(rhs).m_RendererID;
+	}
+
 }

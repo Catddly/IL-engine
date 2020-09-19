@@ -16,6 +16,7 @@ namespace IL
 
 		virtual void SetBool(const std::string& name, const bool& value) = 0;
 		virtual void SetInt(const std::string& name, const int& value) = 0;
+		virtual void SetIntArray(const std::string& name, const int* value, uint32_t count) = 0;
 		virtual void SetMat4(const std::string& name, const glm::mat4& value) = 0;
 		virtual void SetFloat(const std::string& name, const float& value) = 0;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) = 0;

@@ -87,6 +87,13 @@ namespace IL
 		UploadUniformInt(name, value);
 	}
 
+	void OpenGLShader::SetIntArray(const std::string& name, const int* value, uint32_t count)
+	{
+		IL_PROFILE_FUNCTION();
+
+		UploadUniformIntArray(name, value, count);
+	}
+
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
 		IL_PROFILE_FUNCTION();
@@ -131,6 +138,12 @@ namespace IL
 	{
 		GLint location = glGetUniformLocation(m_Program, name.c_str());
 		glUniform1i(location, values);
+	}
+
+	void OpenGLShader::UploadUniformIntArray(const std::string& name, const int* value, uint32_t count)
+	{
+		GLint location = glGetUniformLocation(m_Program, name.c_str());
+		glUniform1iv(location, count, value);
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& name, const float& values)
