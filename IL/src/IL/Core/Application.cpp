@@ -16,6 +16,7 @@ namespace IL
 	Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+		:m_LastFrameTime(0.0f)
 	{
 		IL_PROFILE_FUNCTION();
 
