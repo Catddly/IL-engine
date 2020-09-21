@@ -16,7 +16,7 @@ namespace IL
 	public:
 		OrthographicCameraController(float aspectRatio, bool isRotate = true);
 
-		const Ref<OrthographicCamera>& GetCamera() const { return m_Camera; }
+		const OrthographicCamera& GetCamera() const { return m_Camera; }
 
 		void OnUpdate(TimeStep dt);
 		void OnEvent(Event& e);
@@ -30,7 +30,7 @@ namespace IL
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
-		Ref<OrthographicCamera> m_Camera;
+		OrthographicCamera m_Camera;
 
 		bool m_IsRotate;
 		float m_Rotation = 0.0f;

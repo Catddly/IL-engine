@@ -30,6 +30,7 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 		m_CameraController->OnUpdate(dt);
 	}
 
+	Renderer2D::ResetStats();
 	{
 		IL_PROFILE_SCOPE("Sandbox2DLayer::Prep");
 		RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
@@ -40,16 +41,24 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 		static float rotation = 0.0f;
 		rotation += dt * 50.0f;
 
-		IL_CORE_TRACE("{0}", rotation);
-
 		IL_PROFILE_SCOPE("Sandbox2DLayer::RenderDrawCall");
-		Renderer2D::BeginScene(m_CameraController->GetCamera(), true);
 
-		Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f }, rotation, { 2.0f, 1.25f }, m_SquareColor);
-		Renderer2D::DrawQuad({ 0.3f, -0.4f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 1.0f });
-		Renderer2D::DrawQuad({ 0.3f, 0.4f }, { 1.0f, 0.7f }, m_SquareColor);
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 4.0f, 4.0f }, m_Texture1, m_UVScaling);
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_UVScaling);
+		Renderer2D::BeginScene(m_CameraController->GetCamera());
+
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_TilingFactor);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 4.0f, 4.0f }, m_Texture1, m_TilingFactor);
+		//Renderer2D::DrawQuad({ 0.3f, 0.4f, 0.0f }, { 1.0f, 0.7f }, m_SquareColor);
+		//Renderer2D::DrawQuad({ 0.3f, -0.4f, 0.0f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 0.4f });
+		Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f, 0.0f }, { 2.0f, 1.25f }, rotation, m_SquareColor);
+
+		for (float x = -0.5f; x <= 0.5f; x += 0.05f)
+		{
+			for (float y = -0.5f; y <= 0.5f; y += 0.05f)
+			{
+				glm::vec4 color = { 1.0f, 0.5 + x, 0.5 + y, m_Alpha };
+				Renderer2D::DrawQuad({ x * 5.0f, y * 5.0f, 0.1f }, { 0.2f, 0.2f }, color);
+			}
+		}
 
 		Renderer::EndScene();
 	}
@@ -57,11 +66,22 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 
 void Sandbox2DLayer::OnImGuiRender()
 {
+#if IL_DEBUG
+	auto stats = Renderer2D::GetStats();
+
+	ImGui::Begin("Statistics");
+	ImGui::Text("DrawCalls: %d", stats.DrawCalls);
+	ImGui::Text("Quads: %d", stats.QuadCount);
+	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	ImGui::End();
+#endif
+
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor), ImGuiColorEditFlags_DisplayHSV);
-	//ImGui::SliderFloat("Rotation", &m_SquareRotation, 0.0f, 360.0f);
 	ImGui::SliderFloat("Depth", &m_Depth, -0.999f, 1.0f);
-	ImGui::SliderFloat("UV", &m_UVScaling, -10.0, 10.0f);
+	ImGui::SliderFloat("TilingFactor", &m_TilingFactor, -10.0f, 10.0f);
+	ImGui::SliderFloat("alpha", &m_Alpha, 0.0f, 1.0f);
 	ImGui::End();
 }
 

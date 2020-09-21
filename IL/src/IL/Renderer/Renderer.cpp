@@ -8,9 +8,9 @@ namespace IL
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
 
-	void Renderer::BeginScene(const std::shared_ptr<Camera>& camera)
+	void Renderer::BeginScene(const OrthographicCamera& camera)
 	{
-		m_SceneData->m_ViewProjectionMatrix = camera->GetViewProjectionMatrix();
+		m_SceneData->m_ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
 	void Renderer::EndScene()
@@ -38,7 +38,7 @@ namespace IL
 		IL_PROFILE_FUNCTION();
 
 		RenderCommand::Init();
-		//Renderer2D::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()

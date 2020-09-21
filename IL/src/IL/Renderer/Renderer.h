@@ -6,7 +6,7 @@
 
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Camera/Camera.h"
+#include "Camera/OrthographicCamera.h"
 
 namespace IL
 {
@@ -15,7 +15,7 @@ namespace IL
 	{
 	public:
 		// TODO
-		static void BeginScene(const std::shared_ptr<Camera>& camera);
+		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
 
 		static void OnWindowResize(uint32_t width, uint32_t height);

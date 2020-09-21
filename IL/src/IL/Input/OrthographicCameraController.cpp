@@ -8,7 +8,7 @@ namespace IL
 {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool isRotate)
-		:m_Camera(std::make_shared<OrthographicCamera>(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)),
+		:m_Camera(OrthographicCamera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)),
 		m_IsRotate(isRotate), m_AspectRatio(aspectRatio)
 	{
 	}
@@ -34,10 +34,10 @@ namespace IL
 			else if (Input::IsKeyPressed(IL_KEY_E))
 				m_Rotation += m_CamRotationSpeed * dt;
 
-			m_Camera->SetRotation(m_Rotation);
+			m_Camera.SetRotation(m_Rotation);
 		}
 
-		m_Camera->SetPosition(m_Position);
+		m_Camera.SetPosition(m_Position);
 		m_CameraMoveSpeed = m_ZoomLevel * m_CameraMoveRatio;
 	}
 
@@ -58,7 +58,7 @@ namespace IL
 		IL_PROFILE_FUNCTION();
 
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera->SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
 	}
 
@@ -71,7 +71,7 @@ namespace IL
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.3f);
 		m_ZoomLevel = std::min(m_ZoomLevel, 3.0f);
 
-;		m_Camera->SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+;		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
 	}
 
