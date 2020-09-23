@@ -15,6 +15,11 @@ void Sandbox2DLayer::OnAttach()
 
 	m_Texture1 = Texture2D::Create("assets/textures/CheckerBoard.png");
 	m_Texture2 = Texture2D::Create("assets/textures/ILLmew.png");
+	m_TileMap = Texture2D::Create("assets/textures/mapPack_tilesheet_2X.png");
+
+	m_TreeTex = SubTexture2D::CreateFromCoord(m_TileMap, { 3, 4 }, { 128, 128 });
+	m_SnowmanTex = SubTexture2D::CreateFromCoord(m_TileMap, { 3, 5 }, { 128, 128 });
+	m_FloorTex = SubTexture2D::CreateFromCoord(m_TileMap, { 0, 5 }, { 128, 128 }, { 3, 3 });
 }
 
 void Sandbox2DLayer::OnDeatch()
@@ -45,20 +50,22 @@ void Sandbox2DLayer::OnUpdate(TimeStep dt)
 
 		Renderer2D::BeginScene(m_CameraController->GetCamera());
 
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_TilingFactor);
-		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 4.0f, 4.0f }, m_Texture1, m_TilingFactor);
-		//Renderer2D::DrawQuad({ 0.3f, 0.4f, 0.0f }, { 1.0f, 0.7f }, m_SquareColor);
-		//Renderer2D::DrawQuad({ 0.3f, -0.4f, 0.0f }, { 0.75f, 0.5f }, { 0.4f, 0.9f, 0.4f, 0.4f });
-		Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f, 0.0f }, { 2.0f, 1.25f }, rotation, m_SquareColor);
+		//Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_TilingFactor);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture1, m_TilingFactor);
+		Renderer2D::DrawQuad({ 0.0f, 1.8f, 0.3f }, { 1.0f, 1.0f }, m_TreeTex);
+		Renderer2D::DrawQuad({ -0.6f, 1.8f, 0.31f }, { 1.0f, 1.0f }, m_TreeTex);
+		Renderer2D::DrawQuad({ 0.6f, 1.8f, 0.32f }, { 1.0f, 1.0f }, m_SnowmanTex);
+		Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.33f }, { 1.0f, 1.0f }, m_FloorTex);
+		//Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f, 0.0f }, { 2.0f, 1.25f }, rotation, m_SquareColor);
 
-		for (float x = -0.5f; x <= 0.5f; x += 0.05f)
-		{
-			for (float y = -0.5f; y <= 0.5f; y += 0.05f)
-			{
-				glm::vec4 color = { 1.0f, 0.5 + x, 0.5 + y, m_Alpha };
-				Renderer2D::DrawQuad({ x * 5.0f, y * 5.0f, 0.1f }, { 0.2f, 0.2f }, color);
-			}
-		}
+		//for (float x = -0.5f; x <= 0.5f; x += 0.05f)
+		//{
+		//	for (float y = -0.5f; y <= 0.5f; y += 0.05f)
+		//	{
+		//		glm::vec4 color = { 1.0f, 0.5 + x, 0.5 + y, m_Alpha };
+		//		Renderer2D::DrawQuad({ x * 5.0f, y * 5.0f, 0.1f }, { 0.2f, 0.2f }, color);
+		//	}
+		//}
 
 		Renderer::EndScene();
 	}
