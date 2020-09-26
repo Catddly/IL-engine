@@ -29,6 +29,8 @@ namespace IL
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 
+		void Close();
+
 		inline static Application& GetApplication() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 	private:
