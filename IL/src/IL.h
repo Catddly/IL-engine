@@ -28,6 +28,7 @@
 #include "IL/Renderer/RenderCommand.h"
 #include "IL/Renderer/Camera/Camera.h"
 #include "IL/Renderer/Shader.h"
+#include "IL/Renderer/FrameBuffer.h"
 #include "IL/Renderer/Texture.h"
 #include "IL/Renderer/SubTexture2D.h"
 

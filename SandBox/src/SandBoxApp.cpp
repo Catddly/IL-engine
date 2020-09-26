@@ -161,6 +161,7 @@ class SandBox : public IL::Application
 {
 public: 
 	SandBox()
+		: Application("SandBox")
 	{
 		//PushLayer(new ExampleLayer());
 		//PushOverlay(new TestLayer());

@@ -53,12 +53,19 @@ namespace IL
 		//dispatcher.Dispatch<MouseMovedEvent>(IL_BIND_EVENT_FN(OrthographicCameraController::OnMouseMoved));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		IL_PROFILE_FUNCTION();
+
+		m_AspectRatio = width / height;
+		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	}
+
 	bool OrthographicCameraController::OnWindowResize(WindowResizeEvent& e)
 	{
 		IL_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjectionMatrix(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
 

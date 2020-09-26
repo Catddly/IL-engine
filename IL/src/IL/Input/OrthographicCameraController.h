@@ -20,6 +20,8 @@ namespace IL
 
 		void OnUpdate(TimeStep dt);
 		void OnEvent(Event& e);
+
+		void OnResize(float width, float height);
 	private:
 		bool OnWindowResize(WindowResizeEvent& e);
 

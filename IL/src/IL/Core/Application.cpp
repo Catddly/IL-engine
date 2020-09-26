@@ -15,7 +15,7 @@ namespace IL
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 		:m_LastFrameTime(0.0f)
 	{
 		IL_PROFILE_FUNCTION();
@@ -23,7 +23,8 @@ namespace IL
 		IL_CORE_ASSERT(!s_Instance, "Already had one application!");
 		s_Instance = this;
 
-		m_Window = Window::Create();
+		WindowProps windowProps(name, 1920, 1080);
+		m_Window = Window::Create(windowProps);
 		m_Window->SetEventCallback(IL_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
@@ -156,12 +157,7 @@ namespace IL
 
 	bool Application::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetKeyCode() == 256 /* esc */)
-		{
-			WindowCloseEvent e;
-			OnWindowClose(e);
-		}
-		else if (e.GetKeyCode() == 84 /* t */)
+		if (e.GetKeyCode() == 84 /* t */)
 		{
 			m_ShowWindowTrace = !m_ShowWindowTrace;
 		}

@@ -17,7 +17,7 @@ namespace IL
 	class IL_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "");
 		Application(const Application&) = delete;
 		Application& operator=(const Application&) = delete;
 		virtual ~Application();
