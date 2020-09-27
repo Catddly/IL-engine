@@ -70,6 +70,9 @@ namespace IL
 
 	void OpenGLFrameBuffer::Resize(uint32_t width, uint32_t height)
 	{
+		if (width <= 0 || height <= 0)
+			return;
+
 		m_Props.Width = width;
 		m_Props.Height = height;
 

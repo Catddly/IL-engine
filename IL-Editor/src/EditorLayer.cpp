@@ -40,7 +40,8 @@ namespace IL
 		IL_PROFILE_FUNCTION();
 		{
 			IL_PROFILE_SCOPE("EditorLayer::CameraUpdate");
-			m_CameraController->OnUpdate(dt);
+			if (m_ViewportFocused)
+				m_CameraController->OnUpdate(dt);
 		}
 
 		Renderer2D::ResetStats();
@@ -164,7 +165,11 @@ namespace IL
 		ImGui::End();
 #endif
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
 		ImGui::Begin("Viewport");
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+
 		// Draw frameBuffer on viewport
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		uint32_t colorAttachTexture = m_FrameBuffer->GetColorAttachmentRendererID();
@@ -177,6 +182,7 @@ namespace IL
 			m_CameraController->OnResize(viewportSize.x, viewportSize.y);
 		}
 		ImGui::End();
+
 		ImGui::PopStyleVar();
 
 		ImGui::Begin("Settings");
@@ -189,7 +195,8 @@ namespace IL
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		m_CameraController->OnEvent(e);
+		if (m_ViewportFocused && m_ViewportHovered)
+			m_CameraController->OnEvent(e);
 	}
 
 }

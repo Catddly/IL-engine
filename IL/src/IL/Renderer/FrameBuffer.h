@@ -13,6 +13,8 @@ namespace IL
 	class FrameBuffer
 	{
 	public:
+		virtual ~FrameBuffer() = default;
+
 		static Ref<FrameBuffer> Create(const FrameBufferProps& props);
 
 		virtual void Bind() = 0;

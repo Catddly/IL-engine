@@ -31,6 +31,8 @@ namespace IL
 		float m_Depth = 0.0f;
 		float m_TilingFactor = 1.0f;
 		float m_Alpha = 1.0f;
+
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
 	};
 
 }

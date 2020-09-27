@@ -26,8 +26,6 @@ namespace IL
 	{
 	}
 
-
-
 	void ImGuiLayer::OnAttach()
 	{
 		IL_PROFILE_FUNCTION();
