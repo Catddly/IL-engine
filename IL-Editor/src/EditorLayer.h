@@ -24,6 +24,9 @@ namespace IL
 		Ref<SubTexture2D> m_TreeTex, m_SnowmanTex, m_FloorTex;
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		Ref<Scene> m_ActiveScene;
+		Entity m_SquareEntity;
+
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
 		glm::vec4 m_SquareColor = glm::vec4(0.3f, 0.3f, 0.9f, 1.0f);

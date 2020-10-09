@@ -16,6 +16,7 @@ IncludeDir["glad"] =  "IL/vendor/glad/include"
 IncludeDir["ImGui"] = "IL/vendor/imgui"
 IncludeDir["glm"] = "IL/vendor/glm"
 IncludeDir["stb_image"] = "IL/vendor/stb_image"
+IncludeDir["entt"] = "IL/vendor/entt/include"
 
 group "Dependencies"
 
@@ -61,7 +62,8 @@ project "IL"
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -125,7 +127,8 @@ project "SandBox"
 		"IL/vendor/spdlog/include",
 		"IL/src",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.entt}"
 	}
 
 	links
@@ -179,7 +182,8 @@ project "IL-Editor"
 		"IL/vendor/spdlog/include",
 		"IL/src",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}"
+		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.entt}"
 	}
 
 	links

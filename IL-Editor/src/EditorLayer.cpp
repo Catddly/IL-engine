@@ -28,6 +28,11 @@ namespace IL
 		myProps.Width = 1280;
 		myProps.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(myProps);
+
+		m_ActiveScene = CreateRef<Scene>();
+		m_SquareEntity = m_ActiveScene->CreateEntity();
+
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
 	}
 
 	void EditorLayer::OnDeatch()
@@ -45,9 +50,9 @@ namespace IL
 		}
 
 		Renderer2D::ResetStats();
-		m_FrameBuffer->Bind();
 		{
 			IL_PROFILE_SCOPE("EditorLayer::Prep");
+			m_FrameBuffer->Bind();
 			RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1.0 });
 			RenderCommand::Clear();
 		}
@@ -60,12 +65,14 @@ namespace IL
 
 			Renderer2D::BeginScene(m_CameraController->GetCamera());
 
+			m_ActiveScene->OnUpdate(dt);
+
 			//Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_TilingFactor);
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture1, m_TilingFactor);
-			Renderer2D::DrawQuad({ 0.0f, 1.8f, 0.3f }, { 1.0f, 1.0f }, m_TreeTex);
-			Renderer2D::DrawQuad({ -0.6f, 1.8f, 0.31f }, { 1.0f, 1.0f }, m_TreeTex);
-			Renderer2D::DrawQuad({ 0.6f, 1.8f, 0.32f }, { 1.0f, 1.0f }, m_SnowmanTex);
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.33f }, { 1.0f, 1.0f }, m_FloorTex);
+			//Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture1, m_TilingFactor);
+			//Renderer2D::DrawQuad({ 0.0f, 1.8f, 0.3f }, { 1.0f, 1.0f }, m_TreeTex);
+			//Renderer2D::DrawQuad({ -0.6f, 1.8f, 0.31f }, { 1.0f, 1.0f }, m_TreeTex);
+			//Renderer2D::DrawQuad({ 0.6f, 1.8f, 0.32f }, { 1.0f, 1.0f }, m_SnowmanTex);
+			//Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.33f }, { 1.0f, 1.0f }, m_FloorTex);
 			//Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f, 0.0f }, { 2.0f, 1.25f }, rotation, m_SquareColor);
 
 			//for (float x = -0.5f; x <= 0.5f; x += 0.05f)
@@ -78,8 +85,8 @@ namespace IL
 			//}
 
 			Renderer::EndScene();
+			m_FrameBuffer->UnBind();
 		}
-		m_FrameBuffer->UnBind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -186,10 +193,19 @@ namespace IL
 		ImGui::PopStyleVar();
 
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square color", glm::value_ptr(m_SquareColor), ImGuiColorEditFlags_DisplayHSV);
+
 		ImGui::SliderFloat("Depth", &m_Depth, -0.999f, 1.0f);
 		ImGui::SliderFloat("TilingFactor", &m_TilingFactor, -10.0f, 10.0f);
 		ImGui::SliderFloat("alpha", &m_Alpha, 0.0f, 1.0f);
+
+		ImGui::Separator();
+		auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+		ImGui::Text("%s", tag.c_str());
+
+		auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
+		ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
+		ImGui::Separator();
+
 		ImGui::End();
 	}
 

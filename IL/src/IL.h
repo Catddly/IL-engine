@@ -19,6 +19,10 @@
 
 #include "IL/Input/OrthographicCameraController.h"
 
+#include "IL/Scene/Components.h"
+#include "IL/Scene/Scene.h"
+#include "IL/Scene/Entity.h"
+
 // -------------Renderer-----------------
 
 #include "IL/Renderer/Buffer.h"
