@@ -22,6 +22,7 @@
 #include "IL/Scene/Components.h"
 #include "IL/Scene/Scene.h"
 #include "IL/Scene/Entity.h"
+#include "IL/Scene/ScriptableEntity.h"
 
 // -------------Renderer-----------------
 

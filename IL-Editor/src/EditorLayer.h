@@ -26,6 +26,7 @@ namespace IL
 
 		Ref<Scene> m_ActiveScene;
 		Entity m_SquareEntity;
+		Entity m_ScriptEntity;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 

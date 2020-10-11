@@ -30,9 +30,37 @@ namespace IL
 		m_FrameBuffer = FrameBuffer::Create(myProps);
 
 		m_ActiveScene = CreateRef<Scene>();
-		m_SquareEntity = m_ActiveScene->CreateEntity();
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+		m_ScriptEntity = m_ActiveScene->CreateEntity("Scripted square");
 
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+
+		auto& transform = m_ScriptEntity.GetComponent<TransformComponent>();
+		transform.Transform *= glm::scale(glm::mat4(1.0f), glm::vec3(0.4f));
+
+		class SquareAnimated : public SciptableEntity
+		{
+		public:
+			void OnCreate()
+			{
+				IL_CORE_INFO("SquareAnimated::OnCreate");
+			}
+
+			void OnUpdate(TimeStep dt)
+			{
+				auto& transform = GetComponent<TransformComponent>();
+				static float clock = 0.0f;
+				float speed = 3.0f;
+				float amplitude = 0.7f;
+
+				transform.Transform[3][0] = glm::sin(clock) * amplitude;
+				transform.Transform[3][1] = glm::cos(clock) * amplitude;
+				clock += dt * speed;
+			}
+		};
+
+		m_ScriptEntity.AddComponent<NativeScriptComponent>().Bind<SquareAnimated>();
 	}
 
 	void EditorLayer::OnDeatch()
@@ -58,9 +86,6 @@ namespace IL
 		}
 
 		{
-			static float rotation = 0.0f;
-			rotation += dt * 50.0f;
-
 			IL_PROFILE_SCOPE("EditorLayer::RenderDrawCall");
 
 			Renderer2D::BeginScene(m_CameraController->GetCamera());
@@ -198,13 +223,16 @@ namespace IL
 		ImGui::SliderFloat("TilingFactor", &m_TilingFactor, -10.0f, 10.0f);
 		ImGui::SliderFloat("alpha", &m_Alpha, 0.0f, 1.0f);
 
-		ImGui::Separator();
-		auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
-		ImGui::Text("%s", tag.c_str());
+		if (m_SquareEntity)
+		{
+			ImGui::Separator();
+			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+			ImGui::Text("%s", tag.c_str());
 
-		auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
-		ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
-		ImGui::Separator();
+			auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
+			ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
+			ImGui::Separator();
+		}
 
 		ImGui::End();
 	}

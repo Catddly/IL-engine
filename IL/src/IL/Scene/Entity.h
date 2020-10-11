@@ -13,6 +13,7 @@ namespace IL
 		Entity() = default;
 		Entity(entt::entity entity, Scene* scene)
 			:m_EntityHandle(entity), m_Scene(scene) {}
+		Entity(const Entity&) = default;
 
 		template <typename T>
 		bool HasComponent()
@@ -23,22 +24,27 @@ namespace IL
 		template <typename T, typename ...Args>
 		T& AddComponent(Args&&... args)
 		{
+			//IL_CORE_ASSERT(HasComponent<T>(), "Already had a component!");
 			return m_Scene->m_Registry.emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
 		}
 
 		template <typename T>
 		T& GetComponent()
 		{
+			IL_CORE_ASSERT(!HasComponent<T>(), "Do not had this component!");
 			return m_Scene->m_Registry.get<T>(m_EntityHandle);
 		}
 
 		template <typename T>
 		void RemoveComponent()
 		{
+			IL_CORE_ASSERT(!HasComponent<T>(), "Do not had this component!");
 			m_Scene->m_Registry.remove<T>(m_EntityHandle);
 		}
+
+		operator bool() const { return m_EntityHandle != entt::null; }
 	private:
-		entt::entity m_EntityHandle { 0 };
+		entt::entity m_EntityHandle = entt::null;
 		Scene* m_Scene = nullptr;
 	};
 

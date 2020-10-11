@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#include "ScriptableEntity.h"
+
 namespace IL
 {
 
@@ -37,6 +39,21 @@ namespace IL
 
 		operator glm::mat4& () { return Transform; }
 		operator const glm::mat4& () const { return Transform; }
+	};
+
+	struct NativeScriptComponent
+	{
+		SciptableEntity* Instance = nullptr;
+
+		SciptableEntity*(*InstantiateScript)();
+		void(*DestroyScript)(NativeScriptComponent*);
+
+		template <typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<SciptableEntity*>(new T()); };
+			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+		}
 	};
 
 }
