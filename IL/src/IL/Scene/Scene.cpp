@@ -26,7 +26,7 @@ namespace IL
 			//TODO: move to Scene::OnScenePlay
 			if (!nsc.Instance)
 			{
-				nsc.Instance = nsc.InstantiateScript();
+				nsc.Instance = nsc.instantiateScript();
 				nsc.Instance->m_Entity = Entity{ entity, this };
 				nsc.Instance->OnCreate();
 			}

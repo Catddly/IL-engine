@@ -2,6 +2,8 @@
 
 #include <IL.h>
 
+#include "Panels/SceneHierachyPanel.h"
+
 namespace IL
 {
 
@@ -37,6 +39,9 @@ namespace IL
 		float m_Alpha = 1.0f;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+
+		// Panels
+		SceneHierachyPanel m_SceneHierachyPanel;
 	};
 
 }

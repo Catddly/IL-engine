@@ -45,14 +45,17 @@ namespace IL
 	{
 		SciptableEntity* Instance = nullptr;
 
-		SciptableEntity*(*InstantiateScript)();
-		void(*DestroyScript)(NativeScriptComponent*);
+		using InstantiateScript = SciptableEntity*(*)();
+		using DestroyScript = void(*)(NativeScriptComponent*);
+
+		InstantiateScript instantiateScript = nullptr;
+		DestroyScript destroyScript = nullptr;
 
 		template <typename T>
 		void Bind()
 		{
-			InstantiateScript = []() { return static_cast<SciptableEntity*>(new T()); };
-			DestroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
+			instantiateScript = []() { return static_cast<SciptableEntity*>(new T()); };
+			destroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}
 	};
 

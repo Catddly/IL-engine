@@ -18,6 +18,8 @@ namespace IL
 		void OnUpdate(TimeStep dt);
 	private:
 		friend class Entity;
+		friend class SceneHierachyPanel;
+
 		entt::registry m_Registry;
 	};
 

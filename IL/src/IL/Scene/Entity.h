@@ -43,6 +43,17 @@ namespace IL
 		}
 
 		operator bool() const { return m_EntityHandle != entt::null; }
+		operator uint32_t() const { return static_cast<uint32_t>(m_EntityHandle); }
+
+		bool operator==(const Entity& rhs) const
+		{
+			return m_EntityHandle == rhs.m_EntityHandle && m_Scene == rhs.m_Scene;
+		}
+
+		bool operator!=(const Entity& rhs) const
+		{
+			return !(*this == rhs);
+		}
 	private:
 		entt::entity m_EntityHandle = entt::null;
 		Scene* m_Scene = nullptr;

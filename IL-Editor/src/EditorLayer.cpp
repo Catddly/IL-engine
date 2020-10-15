@@ -31,20 +31,18 @@ namespace IL
 
 		m_ActiveScene = CreateRef<Scene>();
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_ScriptEntity = m_ActiveScene->CreateEntity("Scripted square");
+		m_ScriptEntity = m_ActiveScene->CreateEntity("ScriptedEntity");
 
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
 		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-
-		auto& transform = m_ScriptEntity.GetComponent<TransformComponent>();
-		transform.Transform *= glm::scale(glm::mat4(1.0f), glm::vec3(0.4f));
 
 		class SquareAnimated : public SciptableEntity
 		{
 		public:
 			void OnCreate()
 			{
-				IL_CORE_INFO("SquareAnimated::OnCreate");
+				auto& transform = GetComponent<TransformComponent>();
+				transform.Transform *= glm::scale(glm::mat4(1.0f), glm::vec3(0.4f));
 			}
 
 			void OnUpdate(TimeStep dt)
@@ -61,6 +59,8 @@ namespace IL
 		};
 
 		m_ScriptEntity.AddComponent<NativeScriptComponent>().Bind<SquareAnimated>();
+
+		m_SceneHierachyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDeatch()
@@ -184,6 +184,9 @@ namespace IL
 		}
 		ImGui::End();
 
+		// Panels
+		m_SceneHierachyPanel.OnImGuiRender();
+
 #if IL_DEBUG
 		auto stats = Renderer2D::GetStats();
 
@@ -223,16 +226,9 @@ namespace IL
 		ImGui::SliderFloat("TilingFactor", &m_TilingFactor, -10.0f, 10.0f);
 		ImGui::SliderFloat("alpha", &m_Alpha, 0.0f, 1.0f);
 
-		if (m_SquareEntity)
-		{
-			ImGui::Separator();
-			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
-			ImGui::Text("%s", tag.c_str());
-
-			auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
-			ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
-			ImGui::Separator();
-		}
+		auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
+		ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
+		ImGui::Separator();
 
 		ImGui::End();
 	}
