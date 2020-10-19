@@ -31,7 +31,7 @@ namespace IL
 
 		m_ActiveScene = CreateRef<Scene>();
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_ScriptEntity = m_ActiveScene->CreateEntity("ScriptedEntity");
+		m_ScriptEntity = m_ActiveScene->CreateEntity("Scripted Entity");
 
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
 		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
