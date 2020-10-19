@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include "IL/Scene/Components.h"
 
 namespace IL
@@ -27,6 +29,16 @@ namespace IL
 			DrawEntityTag(entity);
 		});
 
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			m_SelectedEntity = { };
+
+		ImGui::End();
+
+		ImGui::Begin("Properties");
+
+		if (m_SelectedEntity)
+			DrawProperties(m_SelectedEntity);
+
 		ImGui::End();
 	}
 
@@ -42,10 +54,34 @@ namespace IL
 		}
 
 		if (opened)
-		{
-			ImGui::Text("Pop!");
 			ImGui::TreePop();
-			// draw the properties of entity
+	}
+
+	void SceneHierachyPanel::DrawProperties(Entity entity)
+	{
+		if (entity.HasComponent<TagComponent>())
+		{
+			auto& tag = entity.GetComponent<TagComponent>().Tag;
+
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			strcpy_s(buffer, tag.c_str());
+			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+			{
+				tag = std::string(buffer);
+			}
+		}
+
+		if (entity.HasComponent<TransformComponent>())
+		{
+			auto& transform = entity.GetComponent<TransformComponent>().Transform;
+
+			if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.05f);
+
+				ImGui::TreePop();
+			}
 		}
 	}
 

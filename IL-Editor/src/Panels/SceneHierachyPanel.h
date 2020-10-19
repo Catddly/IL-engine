@@ -17,7 +17,9 @@ namespace IL
 		void SetContext(const Ref<Scene>& context);
 
 		void OnImGuiRender();
+	private:
 		void DrawEntityTag(Entity entity);
+		void DrawProperties(Entity entity);
 	private:
 		Ref<Scene> m_Context;
 		Entity m_SelectedEntity;
