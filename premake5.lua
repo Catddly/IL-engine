@@ -1,6 +1,6 @@
 workspace "IL"
 	architecture "x64"
-	startproject "SandBox"
+	startproject "IL-Editor"
 
 	configurations 
 	{
