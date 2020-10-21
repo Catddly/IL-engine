@@ -32,7 +32,7 @@ namespace IL
 
 		m_ActiveScene = CreateRef<Scene>();
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_ScriptEntity = m_ActiveScene->CreateEntity("ScriptedEntity");
+		m_ScriptEntity = m_ActiveScene->CreateEntity("Scripted Entity");
 
 		m_FirstCameraEntity = m_ActiveScene->CreateEntity("First Camera");
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera");
