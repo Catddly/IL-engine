@@ -5,6 +5,8 @@
 #include "IL/Renderer/Shader.h"
 #include "IL/Renderer/RenderCommand.h"
 
+#include "IL/Renderer/Camera/Camera.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace IL 
@@ -128,7 +130,7 @@ namespace IL
 	{
 		IL_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = camera.GetProjectionMatrix() * glm::inverse(transform);
+		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
 
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);

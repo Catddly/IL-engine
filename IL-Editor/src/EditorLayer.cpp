@@ -3,6 +3,7 @@
 #include "imgui.h"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace IL
 {
@@ -33,8 +34,18 @@ namespace IL
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_ScriptEntity = m_ActiveScene->CreateEntity("ScriptedEntity");
 
+		m_FirstCameraEntity = m_ActiveScene->CreateEntity("First Camera");
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera");
+
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
 		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
+
+		m_SquareEntity.GetComponent<TransformComponent>().Transform[3][2] = -6.0f;
+
+		m_FirstCameraEntity.AddComponent<CameraComponent>();
+
+		m_SecondCameraEntity.AddComponent<CameraComponent>();
+		m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = false;
 
 		class SquareAnimated : public SciptableEntity
 		{
@@ -50,10 +61,11 @@ namespace IL
 				auto& transform = GetComponent<TransformComponent>();
 				static float clock = 0.0f;
 				float speed = 3.0f;
-				float amplitude = 0.7f;
+				float amplitude = 1.5f;
 
-				transform.Transform[3][0] = glm::sin(clock) * amplitude;
-				transform.Transform[3][1] = glm::cos(clock) * amplitude;
+				transform.Transform[3][0] = glm::sin(clock) * glm::cos(clock) * amplitude;
+				transform.Transform[3][1] = glm::sin(clock) * glm::sin(clock) * amplitude;
+				transform.Transform[3][2] = glm::cos(clock) * amplitude;
 				clock += dt * speed;
 			}
 		};
@@ -88,28 +100,10 @@ namespace IL
 		{
 			IL_PROFILE_SCOPE("EditorLayer::RenderDrawCall");
 
-			Renderer2D::BeginScene(m_CameraController->GetCamera());
-
+			//Renderer2D::BeginScene(m_CameraController->GetCamera());
 			m_ActiveScene->OnUpdate(dt);
 
-			//Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.99f }, { 6.0f, 6.0f }, m_Texture2, m_TilingFactor);
-			//Renderer2D::DrawQuad({ 0.0f, 0.0f, m_Depth }, { 5.0f, 5.0f }, m_Texture1, m_TilingFactor);
-			//Renderer2D::DrawQuad({ 0.0f, 1.8f, 0.3f }, { 1.0f, 1.0f }, m_TreeTex);
-			//Renderer2D::DrawQuad({ -0.6f, 1.8f, 0.31f }, { 1.0f, 1.0f }, m_TreeTex);
-			//Renderer2D::DrawQuad({ 0.6f, 1.8f, 0.32f }, { 1.0f, 1.0f }, m_SnowmanTex);
-			//Renderer2D::DrawQuad({ 0.0f, 0.0f, 0.33f }, { 1.0f, 1.0f }, m_FloorTex);
-			//Renderer2D::DrawRotatedQuad({ 2.0f, 2.0f, 0.0f }, { 2.0f, 1.25f }, rotation, m_SquareColor);
-
-			//for (float x = -0.5f; x <= 0.5f; x += 0.05f)
-			//{
-			//	for (float y = -0.5f; y <= 0.5f; y += 0.05f)
-			//	{
-			//		glm::vec4 color = { 1.0f, 0.5 + x, 0.5 + y, m_Alpha };
-			//		Renderer2D::DrawQuad({ x * 5.0f, y * 5.0f, 0.1f }, { 0.2f, 0.2f }, color);
-			//	}
-			//}
-
-			Renderer::EndScene();
+			//Renderer::EndScene();
 			m_FrameBuffer->UnBind();
 		}
 	}
@@ -214,7 +208,11 @@ namespace IL
 		{
 			m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 			m_ViewportSize = { viewportSize.x, viewportSize.y };
-			m_CameraController->OnResize(viewportSize.x, viewportSize.y);
+			//m_CameraController->OnResize(viewportSize.x, viewportSize.y);
+
+			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			m_ViewportSize.x = viewportSize.x;
+			m_ViewportSize.y = viewportSize.y;
 		}
 		ImGui::End();
 
@@ -229,6 +227,13 @@ namespace IL
 		auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
 		ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
 		ImGui::Separator();
+
+		static bool useSecondCamera = false;
+		if (ImGui::Checkbox("Second Camera", &useSecondCamera))
+		{
+			m_FirstCameraEntity.GetComponent<CameraComponent>().Primary = !useSecondCamera;
+			m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = useSecondCamera;
+		}
 
 		ImGui::End();
 	}

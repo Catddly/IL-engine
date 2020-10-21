@@ -1,27 +1,27 @@
 #pragma once
 
-#include "Camera.h"
+#include <glm/glm.hpp>
 
 namespace IL
 {
 
-	class OrthographicCamera : public Camera
+	class OrthographicCamera
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
 		void SetProjectionMatrix(float left, float right, float bottom, float top);
 
-		virtual const glm::mat4& GetViewMatrix()	       const override { return m_ViewMatrix; }
-		virtual const glm::mat4& GetProjectionMatrix()	   const override { return m_ProjectionMatrix; }
-		virtual const glm::mat4& GetViewProjectionMatrix() const override { return m_ViewProjectMatrix; }
+		const glm::mat4& GetViewMatrix()	       const { return m_ViewMatrix; }
+		const glm::mat4& GetProjectionMatrix()	   const { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectMatrix; }
 
-		virtual const glm::vec3& GetPosition() const override { return m_Position; }
-		virtual void SetPosition(const glm::vec3& position) override { m_Position = position; ReCalViewMatrix(); }
+		const glm::vec3& GetPosition() const { return m_Position; }
+		void SetPosition(const glm::vec3& position) { m_Position = position; ReCalViewMatrix(); }
 
-		virtual const float& GetRotation() const override { return m_Rotation; }
-		virtual void SetRotation(const float& rotation) override { m_Rotation = rotation; ReCalViewMatrix(); }
+		const float& GetRotation() const { return m_Rotation; }
+		void SetRotation(const float& rotation) { m_Rotation = rotation; ReCalViewMatrix(); }
 	private:
-		virtual void ReCalViewMatrix() override;
+		void ReCalViewMatrix();
 	private:
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ProjectionMatrix;

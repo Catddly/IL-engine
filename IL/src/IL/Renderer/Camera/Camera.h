@@ -8,27 +8,14 @@ namespace IL
 	class Camera
 	{
 	public:
-		enum class CameraType
-		{
-			Null = 0, Orthographic, Pespective
-		};
+		Camera() = default;
+		Camera(const glm::mat4& projection)
+			:m_ProjectionMatrix(projection) {}
+		virtual ~Camera() = default;
 
-		virtual ~Camera() {}
-
-		virtual const glm::mat4& GetViewMatrix()		   const = 0;
-		virtual const glm::mat4& GetProjectionMatrix()	   const = 0;
-		virtual const glm::mat4& GetViewProjectionMatrix() const = 0;
-
-		virtual const glm::vec3& GetPosition() const = 0;
-		virtual void SetPosition(const glm::vec3& position) = 0;
-
-		virtual const float& GetRotation() const = 0;
-		virtual void SetRotation(const float& rotation) = 0;
-
-		static std::shared_ptr<Camera> CreateDefault(CameraType type);
-		static std::shared_ptr<Camera> CreateOrtho(float left, float right, float bottom, float top);
-	private:
-		virtual void ReCalViewMatrix() = 0;
+		const glm::mat4& GetProjection() const { return m_ProjectionMatrix; }
+	protected:
+		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
 	};
 
 }

@@ -5,6 +5,8 @@
 
 #include "ScriptableEntity.h"
 
+#include "SceneCamera.h"
+
 namespace IL
 {
 
@@ -57,6 +59,16 @@ namespace IL
 			instantiateScript = []() { return static_cast<SciptableEntity*>(new T()); };
 			destroyScript = [](NativeScriptComponent* nsc) { delete nsc->Instance; nsc->Instance = nullptr; };
 		}
+	};
+
+	struct CameraComponent
+	{
+		SceneCamera camera;
+		bool Primary = true;
+		bool FixedAspectRatio = false;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
 	};
 
 }
