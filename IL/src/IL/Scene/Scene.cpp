@@ -11,17 +11,22 @@ namespace IL
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = { m_Registry.create(), this };
-		entity.AddComponent<TransformComponent>(glm::mat4(1.0f));
+		entity.AddComponent<TransformComponent>();
 		auto& tagCom = entity.AddComponent<TagComponent>();
 		tagCom.Tag = name.empty() ? "Default" : name;
 
 		return entity;
 	}
 
+	void Scene::DestroyEntity(Entity entity)
+	{
+		m_Registry.destroy(entity);
+	}
+
 	void Scene::OnUpdate(TimeStep dt)
 	{
 		Camera* mainCamera = nullptr;
-		glm::mat4* transform = nullptr;
+		glm::mat4 transform = glm::mat4(1.0f);
 		{
 			// find the primary camera
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
@@ -32,7 +37,7 @@ namespace IL
 				if (cam.Primary)
 				{
 					mainCamera = &cam.camera;
-					transform = &trans.Transform;
+					transform = trans.GetTransform();
 					break;
 				}
 			}
@@ -40,14 +45,14 @@ namespace IL
 
 		if (mainCamera)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *transform);
+			Renderer2D::BeginScene(mainCamera->GetProjection(), transform);
 
 			// Render sprite
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
 				auto [trans, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(trans.Transform, sprite.Color);
+				Renderer2D::DrawQuad(trans.GetTransform(), sprite.Color);
 			}
 
 			// Instantiate and update all native scripts
@@ -86,4 +91,35 @@ namespace IL
 		}
 	}
 
+	template <typename T>
+	void Scene::OnComponentAdded(Entity entity, T& component)
+	{
+		static_assert(false);
+	}
+
+	template <>
+	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+	}
+
+	template <>
+	void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)
+	{
+	}
+
+	template <>
+	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
+	{
+	}
+
+	template <>
+	void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+	{
+	}
+
+	template <>
+	void Scene::OnComponentAdded<CameraComponent>(Entity entity, CameraComponent& component)
+	{
+		component.camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+	}
 }

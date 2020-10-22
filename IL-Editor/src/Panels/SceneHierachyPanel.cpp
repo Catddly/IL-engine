@@ -1,6 +1,7 @@
 #include "SceneHierachyPanel.h"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -8,6 +9,75 @@
 
 namespace IL
 {
+	static void DrawVec3Control(const std::string& label, glm::vec3& values, float defaultValue = 0.0f, 
+		float speed = 0.05f, float columnWidth = 100.0f)
+	{
+		// unique ID
+		ImGui::PushID(label.c_str());
+
+		// first column for label
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 0.0f });
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		// Button X begin
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 0.71f, 0.75f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 0.41f, 0.71f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 0.71f, 0.75f, 1.0f));
+
+		if (ImGui::Button("X", buttonSize))
+			values.x = defaultValue;
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &values.x, speed, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PopStyleColor(3);
+		// Button X end
+
+		// Button Y begin
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.596f, 0.984f, 0.596f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 1.0f, 0.5f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.596f, 0.984f, 0.596f, 1.0f));
+
+		if (ImGui::Button("Y", buttonSize))
+			values.y = defaultValue;
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &values.y, speed, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PopStyleColor(3);
+		// Button Y end
+
+		// Button Z begin
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.529f, 0.808f, 0.98f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.0f, 0.749f, 1.0f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.529f, 0.808f, 0.98f, 1.0f));
+
+		if (ImGui::Button("Z", buttonSize))
+			values.z = defaultValue;
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &values.z, speed, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleColor(3);
+		// Button Z end
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+
 	SceneHierachyPanel::SceneHierachyPanel(const Ref<Scene>& context)
 	{
 		SetContext(context);
@@ -31,12 +101,45 @@ namespace IL
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
 			m_SelectedEntity = { };
 
+		// Right-click on blank space
+		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		{
+			if (ImGui::MenuItem("Create Empty Entity"))
+				m_Context->CreateEntity("Empty Entity");
+
+			ImGui::EndPopup();
+		}
+
 		ImGui::End();
 
 		ImGui::Begin("Properties");
 
 		if (m_SelectedEntity)
+		{
 			DrawProperties(m_SelectedEntity);
+
+			if (ImGui::BeginPopupContextWindow(0, 1, false))
+			{	
+				ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen;
+				bool opened = ImGui::TreeNodeEx("Add Component", flags);
+
+				if (opened)
+				{
+					if (ImGui::MenuItem("Sprite Renderer"))
+					{
+						if (!m_SelectedEntity.HasComponent<SpriteRendererComponent>())
+							m_SelectedEntity.AddComponent<SpriteRendererComponent>();
+					}
+					if (ImGui::MenuItem("Camera"))
+					{
+						if (!m_SelectedEntity.HasComponent<CameraComponent>())
+							m_SelectedEntity.AddComponent<CameraComponent>();
+					}
+					ImGui::TreePop();
+				}
+				ImGui::EndPopup();
+			}
+		}
 
 		ImGui::End();
 	}
@@ -52,12 +155,30 @@ namespace IL
 			m_SelectedEntity = entity;
 		}
 
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+				entityDeleted = true;
+
+			ImGui::EndPopup();
+		}
+
 		if (opened)
 			ImGui::TreePop();
+
+		if (entityDeleted)
+		{
+			m_Context->DestroyEntity(entity);
+			if (m_SelectedEntity == entity)
+				m_SelectedEntity = { };
+		}
 	}
 
 	void SceneHierachyPanel::DrawProperties(Entity entity)
 	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
+
 		if (entity.HasComponent<TagComponent>())
 		{
 			auto& tag = entity.GetComponent<TagComponent>().Tag;
@@ -73,10 +194,14 @@ namespace IL
 
 		if (entity.HasComponent<TransformComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), flags, "Transform"))
 			{
-				auto& transform = entity.GetComponent<TransformComponent>().Transform;
-				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.05f);
+				auto& tc = entity.GetComponent<TransformComponent>();
+				DrawVec3Control("Position", tc.Translation);
+				glm::vec3 rotation = glm::degrees(tc.Rotation);
+				DrawVec3Control("Rotation", rotation, 0.0f, 2.0f);
+				tc.Rotation = glm::radians(rotation);
+				DrawVec3Control("Scale", tc.Scale, 1.0f);
 
 				ImGui::TreePop();
 			}
@@ -84,7 +209,25 @@ namespace IL
 
 		if (entity.HasComponent<CameraComponent>())
 		{
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Camera"))
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			bool opened = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), flags, "Camera");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("+", ImVec2{ 20, 20 }))
+			{
+				ImGui::OpenPopup("ComponentSetting");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSetting"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
 			{
 				auto& cameraComponent = entity.GetComponent<CameraComponent>();
 				auto& cam = cameraComponent.camera;
@@ -152,6 +295,40 @@ namespace IL
 
 				ImGui::TreePop();
 			}
+
+			if (removeComponent)
+				entity.RemoveComponent<CameraComponent>();
+		}
+
+		if (entity.HasComponent<SpriteRendererComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			bool opened = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), flags, "Sprite Renderer");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("+", ImVec2{ 20, 20 }))
+			{
+				ImGui::OpenPopup("ComponentSetting");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSetting"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
+			{
+				auto& color = entity.GetComponent<SpriteRendererComponent>().Color;
+				ImGui::ColorEdit4("Color", glm::value_ptr(color));
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+				entity.RemoveComponent<SpriteRendererComponent>();
 		}
 	}
 

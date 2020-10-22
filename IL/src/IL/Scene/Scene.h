@@ -14,9 +14,13 @@ namespace IL
 		~Scene() = default;
 
 		Entity CreateEntity(const std::string& name = std::string());
+		void DestroyEntity(Entity entity);
 
 		void OnUpdate(TimeStep dt);
 		void OnViewportResize(uint32_t width, uint32_t height);
+	private:
+		template <typename T>
+		void OnComponentAdded(Entity entity, T& component);
 	private:
 		friend class Entity;
 		friend class SceneHierachyPanel;

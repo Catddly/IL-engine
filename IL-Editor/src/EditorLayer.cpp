@@ -9,7 +9,7 @@ namespace IL
 {
 
 	EditorLayer::EditorLayer()
-		:Layer("EditorLayer"), m_CameraController(CreateRef<OrthographicCameraController>(1280.0f / 720.0f, true))
+		:Layer("EditorLayer")
 	{
 	}
 
@@ -31,46 +31,107 @@ namespace IL
 		m_FrameBuffer = FrameBuffer::Create(myProps);
 
 		m_ActiveScene = CreateRef<Scene>();
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+		m_SquareEntityL = m_ActiveScene->CreateEntity("SquareL");
+		m_SquareEntityR = m_ActiveScene->CreateEntity("SquareR");
+		m_SquareEntityT = m_ActiveScene->CreateEntity("SquareT");
+		m_SquareEntityB = m_ActiveScene->CreateEntity("SquareB");
+		m_SquareEntityFront = m_ActiveScene->CreateEntity("SquareFront");
+		m_SquareEntityBack = m_ActiveScene->CreateEntity("SquareBack");
 		m_ScriptEntity = m_ActiveScene->CreateEntity("Scripted Entity");
+
+		m_SquareEntityL.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_SquareEntityR.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_SquareEntityT.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_SquareEntityB.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_SquareEntityFront.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+		m_SquareEntityBack.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
+
+		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
 
 		m_FirstCameraEntity = m_ActiveScene->CreateEntity("First Camera");
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera");
 
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.9f, 0.2f, 1.0f });
-		m_ScriptEntity.AddComponent<SpriteRendererComponent>(glm::vec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-
-		m_SquareEntity.GetComponent<TransformComponent>().Transform[3][2] = -6.0f;
-
 		m_FirstCameraEntity.AddComponent<CameraComponent>();
-
 		m_SecondCameraEntity.AddComponent<CameraComponent>();
 		m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = false;
+
+		glm::vec3 mainOffset = { -1.5f, 0.5f, 0.0f };
+
+		m_SquareEntityL.GetComponent<TransformComponent>().Translation.x = -0.5f;
+		m_SquareEntityL.GetComponent<TransformComponent>().Translation += mainOffset;
+		m_SquareEntityL.GetComponent<TransformComponent>().Rotation.y = glm::radians(90.0f);
+
+		m_SquareEntityR.GetComponent<TransformComponent>().Translation.x = 0.5f;
+		m_SquareEntityR.GetComponent<TransformComponent>().Translation += mainOffset;
+		m_SquareEntityR.GetComponent<TransformComponent>().Rotation.y = glm::radians(90.0f);
+																					
+		m_SquareEntityT.GetComponent<TransformComponent>().Translation.y = 0.5f;	
+		m_SquareEntityT.GetComponent<TransformComponent>().Translation += mainOffset;
+		m_SquareEntityT.GetComponent<TransformComponent>().Rotation.x = glm::radians(90.0f);
+																					
+		m_SquareEntityB.GetComponent<TransformComponent>().Translation.y = -0.5f;	
+		m_SquareEntityB.GetComponent<TransformComponent>().Translation += mainOffset;
+		m_SquareEntityB.GetComponent<TransformComponent>().Rotation.x = glm::radians(90.0f);
+
+		m_SquareEntityFront.GetComponent<TransformComponent>().Translation.z = -0.5f;
+		m_SquareEntityFront.GetComponent<TransformComponent>().Translation += mainOffset;
+		m_SquareEntityBack.GetComponent<TransformComponent>().Translation.z = 0.5f;
+		m_SquareEntityBack.GetComponent<TransformComponent>().Translation += mainOffset;
 
 		class SquareAnimated : public SciptableEntity
 		{
 		public:
 			void OnCreate()
 			{
-				auto& transform = GetComponent<TransformComponent>();
-				transform.Transform *= glm::scale(glm::mat4(1.0f), glm::vec3(0.4f));
+				auto& scale = GetComponent<TransformComponent>().Scale;
+				scale.x = 0.4f;
+				scale.y = 0.4f;
+				scale.z = 0.4f;
 			}
 
 			void OnUpdate(TimeStep dt)
 			{
-				auto& transform = GetComponent<TransformComponent>();
+				auto& translation = GetComponent<TransformComponent>().Translation;
 				static float clock = 0.0f;
 				float speed = 3.0f;
 				float amplitude = 1.5f;
 
-				transform.Transform[3][0] = glm::sin(clock) * glm::cos(clock) * amplitude;
-				transform.Transform[3][1] = glm::sin(clock) * glm::sin(clock) * amplitude;
-				transform.Transform[3][2] = glm::cos(clock) * amplitude;
+				translation.x = glm::sin(clock) * glm::cos(clock) * amplitude;
+				translation.y = glm::sin(clock) * glm::sin(clock) * amplitude;
+				translation.z = glm::cos(clock) * amplitude;
 				clock += dt * speed;
 			}
 		};
 
+		class CameraController : public SciptableEntity
+		{
+		public:
+			void OnUpdate(TimeStep dt) override
+			{
+				auto& translation = GetComponent<TransformComponent>().Translation;
+				//auto& rotation = GetComponent<TransformComponent>().Rotation;
+				float speed = 5.0f;
+				//float rotationSpeed = 5.0f;
+
+				if (Input::IsKeyPressed(IL_KEY_W))
+					translation.y += speed * dt;
+				if (Input::IsKeyPressed(IL_KEY_A))
+					translation.x -= speed * dt;
+				if (Input::IsKeyPressed(IL_KEY_S))
+					translation.y -= speed * dt;
+				if (Input::IsKeyPressed(IL_KEY_D))
+					translation.x += speed * dt;
+				//if (Input::IsKeyPressed(IL_KEY_Q))
+				//	rotation.z += rotationSpeed * dt;
+				//if (Input::IsKeyPressed(IL_KEY_E))
+				//	rotation.z -= rotationSpeed * dt;
+			}
+		};
+
 		m_ScriptEntity.AddComponent<NativeScriptComponent>().Bind<SquareAnimated>();
+
+		m_FirstCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 		m_SceneHierachyPanel.SetContext(m_ActiveScene);
 	}
@@ -83,11 +144,6 @@ namespace IL
 	void EditorLayer::OnUpdate(TimeStep dt)
 	{
 		IL_PROFILE_FUNCTION();
-		{
-			IL_PROFILE_SCOPE("EditorLayer::CameraUpdate");
-			if (m_ViewportFocused)
-				m_CameraController->OnUpdate(dt);
-		}
 
 		Renderer2D::ResetStats();
 		{
@@ -100,10 +156,8 @@ namespace IL
 		{
 			IL_PROFILE_SCOPE("EditorLayer::RenderDrawCall");
 
-			//Renderer2D::BeginScene(m_CameraController->GetCamera());
 			m_ActiveScene->OnUpdate(dt);
 
-			//Renderer::EndScene();
 			m_FrameBuffer->UnBind();
 		}
 	}
@@ -208,7 +262,6 @@ namespace IL
 		{
 			m_FrameBuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 			m_ViewportSize = { viewportSize.x, viewportSize.y };
-			//m_CameraController->OnResize(viewportSize.x, viewportSize.y);
 
 			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 			m_ViewportSize.x = viewportSize.x;
@@ -217,31 +270,12 @@ namespace IL
 		ImGui::End();
 
 		ImGui::PopStyleVar();
-
-		ImGui::Begin("Settings");
-
-		ImGui::SliderFloat("Depth", &m_Depth, -0.999f, 1.0f);
-		ImGui::SliderFloat("TilingFactor", &m_TilingFactor, -10.0f, 10.0f);
-		ImGui::SliderFloat("alpha", &m_Alpha, 0.0f, 1.0f);
-
-		auto& spriteCom = m_SquareEntity.GetComponent<SpriteRendererComponent>();
-		ImGui::ColorEdit4("Square color", glm::value_ptr(spriteCom.Color), ImGuiColorEditFlags_DisplayHSV);
-		ImGui::Separator();
-
-		static bool useSecondCamera = false;
-		if (ImGui::Checkbox("Second Camera", &useSecondCamera))
-		{
-			m_FirstCameraEntity.GetComponent<CameraComponent>().Primary = !useSecondCamera;
-			m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = useSecondCamera;
-		}
-
-		ImGui::End();
 	}
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		if (m_ViewportFocused && m_ViewportHovered)
-			m_CameraController->OnEvent(e);
+		//if (m_ViewportFocused && m_ViewportHovered)
+		//	m_CameraController->OnEvent(e);
 	}
 
 }
