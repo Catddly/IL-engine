@@ -5,6 +5,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Scripts/Scripts.h"
+
 namespace IL
 {
 
@@ -77,56 +79,6 @@ namespace IL
 		m_SquareEntityFront.GetComponent<TransformComponent>().Translation += mainOffset;
 		m_SquareEntityBack.GetComponent<TransformComponent>().Translation.z = 0.5f;
 		m_SquareEntityBack.GetComponent<TransformComponent>().Translation += mainOffset;
-
-		class SquareAnimated : public SciptableEntity
-		{
-		public:
-			void OnCreate()
-			{
-				auto& scale = GetComponent<TransformComponent>().Scale;
-				scale.x = 0.4f;
-				scale.y = 0.4f;
-				scale.z = 0.4f;
-			}
-
-			void OnUpdate(TimeStep dt)
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				static float clock = 0.0f;
-				float speed = 3.0f;
-				float amplitude = 1.5f;
-
-				translation.x = glm::sin(clock) * glm::cos(clock) * amplitude;
-				translation.y = glm::sin(clock) * glm::sin(clock) * amplitude;
-				translation.z = glm::cos(clock) * amplitude;
-				clock += dt * speed;
-			}
-		};
-
-		class CameraController : public SciptableEntity
-		{
-		public:
-			void OnUpdate(TimeStep dt) override
-			{
-				auto& translation = GetComponent<TransformComponent>().Translation;
-				//auto& rotation = GetComponent<TransformComponent>().Rotation;
-				float speed = 5.0f;
-				//float rotationSpeed = 5.0f;
-
-				if (Input::IsKeyPressed(IL_KEY_W))
-					translation.y += speed * dt;
-				if (Input::IsKeyPressed(IL_KEY_A))
-					translation.x -= speed * dt;
-				if (Input::IsKeyPressed(IL_KEY_S))
-					translation.y -= speed * dt;
-				if (Input::IsKeyPressed(IL_KEY_D))
-					translation.x += speed * dt;
-				//if (Input::IsKeyPressed(IL_KEY_Q))
-				//	rotation.z += rotationSpeed * dt;
-				//if (Input::IsKeyPressed(IL_KEY_E))
-				//	rotation.z -= rotationSpeed * dt;
-			}
-		};
 
 		m_ScriptEntity.AddComponent<NativeScriptComponent>().Bind<SquareAnimated>();
 

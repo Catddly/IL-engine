@@ -15,6 +15,7 @@ namespace IL
 		{
 			return m_Entity.GetComponent<T>();
 		}
+		virtual std::string FeedbackScriptName() { return "Unnameed"; }
 	protected:
 		virtual void OnUpdate(TimeStep dt) {}
 		virtual void OnCreate() {}

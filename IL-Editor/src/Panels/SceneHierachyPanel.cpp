@@ -7,6 +7,8 @@
 
 #include "IL/Scene/Components.h"
 
+#include "../Scripts/Scripts.h"
+
 namespace IL
 {
 	static void DrawVec3Control(const std::string& label, glm::vec3& values, float defaultValue = 0.0f, 
@@ -92,6 +94,8 @@ namespace IL
 	{
 		ImGui::Begin("Scene Hierarchy");
 
+		GImGui->FontSize = 15.0f;
+
 		m_Context->m_Registry.each([&](auto entityID)
 			{
 				Entity entity{ entityID, m_Context.get() };
@@ -134,6 +138,22 @@ namespace IL
 					{
 						if (!m_SelectedEntity.HasComponent<CameraComponent>())
 							m_SelectedEntity.AddComponent<CameraComponent>();
+					}
+
+					bool SecondOpened = ImGui::TreeNodeEx("Scripts", ImGuiTreeNodeFlags_OpenOnArrow);;
+					if (SecondOpened)
+					{
+						if (ImGui::MenuItem("Camera Controller"))
+						{
+							if (!m_SelectedEntity.HasComponent<NativeScriptComponent>())
+								m_SelectedEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+						}
+						if (ImGui::MenuItem("Animated Square"))
+						{
+							if (!m_SelectedEntity.HasComponent<NativeScriptComponent>())
+								m_SelectedEntity.AddComponent<NativeScriptComponent>().Bind<SquareAnimated>();
+						}
+						ImGui::TreePop();
 					}
 					ImGui::TreePop();
 				}
@@ -330,6 +350,40 @@ namespace IL
 			if (removeComponent)
 				entity.RemoveComponent<SpriteRendererComponent>();
 		}
+
+		if (entity.HasComponent<NativeScriptComponent>())
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			bool opened = ImGui::TreeNodeEx((void*)typeid(NativeScriptComponent).hash_code(), flags, "NativeScript");
+			ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+			if (ImGui::Button("+", ImVec2{ 20, 20 }))
+			{
+				ImGui::OpenPopup("ComponentSetting");
+			}
+			ImGui::PopStyleVar();
+
+			bool removeComponent = false;
+			if (ImGui::BeginPopup("ComponentSetting"))
+			{
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (opened)
+			{
+				auto& nc = entity.GetComponent<NativeScriptComponent>();
+				auto& instance = nc.Instance;
+				ImGui::Text(instance->FeedbackScriptName().c_str());
+
+				ImGui::TreePop();
+			}
+
+			if (removeComponent)
+				entity.RemoveComponent<NativeScriptComponent>();
+		}
+
 	}
 
 }
