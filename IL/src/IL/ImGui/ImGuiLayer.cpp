@@ -41,6 +41,11 @@ namespace IL
 		//io.ConfigViewportsNoAutoMerge = true;
 		//io.ConfigViewportsNoTaskBarIcon = true;
 
+		// Set Fonts
+		io.Fonts->AddFontFromFileTTF("assets/fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf", 20.f);
+		ImFont* myRegularFont = io.Fonts->AddFontFromFileTTF("assets/fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf", 20.0f);
+		io.FontDefault = myRegularFont;
+
 		// Setup Dear ImGui style
 		ImGui::StyleColorsLight();
 		//ImGui::StyleColorsClassic();
@@ -52,6 +57,8 @@ namespace IL
 			style.WindowRounding = 0.0f;
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
+
+		SetDarkThemeColors();
 
 		auto window = static_cast<GLFWwindow*>(Application::GetApplication().GetWindow().GetNativeWindow());
 
@@ -110,6 +117,40 @@ namespace IL
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
+	}
+
+	void ImGuiLayer::SetDarkThemeColors()
+	{
+		auto& colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.973f, 0.976f, 0.980f, 1.0f };
+
+		// Headers
+		// ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_Header] = ImVec4{ 0.992f, 0.886f, 0.894f, 1.0f };
+		colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.980f, 0.824f, 0.882f, 1.0f };
+		colors[ImGuiCol_HeaderActive] = ImVec4{ 1.0f, 0.686f, 0.8f, 1.0f };
+
+		// Buttons
+		colors[ImGuiCol_Button] = ImVec4{ 0.796f, 0.952f, 0.941f, 1.0f };
+		colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.745f, 0.953f, 0.941f, 1.0f };
+		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.745f, 0.953f, 0.941f, 1.0f };
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.973f, 0.986f, 0.992f, 1.0f };
+		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.804f, 0.855f, 0.992f, 1.0f };
+		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.804f, 0.855f, 0.992f, 1.0f };
+
+		// Tabs
+		colors[ImGuiCol_Tab] = ImVec4{ 0.85f, 0.98f, 1.0f, 1.0f };
+		colors[ImGuiCol_TabHovered] = ImVec4{ 0.118f, 0.588f, 0.988f, 1.0f };
+		colors[ImGuiCol_TabActive] = ImVec4{ 0.15f, 0.9f, 0.91f, 1.0f };
+		colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.905f, 0.951f, 1.0f };
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.804f, 0.855f, 0.992f, 1.0f };
+
+		// Title
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.9f, 1.0f, 1.0f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.79f, 1.0f, 1.0f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.9f, 0.1505f, 0.9f, 1.0f };
 	}
 
 	bool ImGuiLayer::OnMouseScrolled(MouseScrolledEvent& e)

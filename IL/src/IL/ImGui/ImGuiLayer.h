@@ -22,6 +22,8 @@ namespace IL
 
 		void Begin();
 		void End();
+
+		void SetDarkThemeColors();
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 	private:
