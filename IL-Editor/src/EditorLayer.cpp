@@ -7,6 +7,8 @@
 
 #include "Scripts/Scripts.h"
 
+#include "IL/Scene/SceneSerializer.h" 
+
 namespace IL
 {
 
@@ -33,6 +35,7 @@ namespace IL
 		m_FrameBuffer = FrameBuffer::Create(myProps);
 
 		m_ActiveScene = CreateRef<Scene>();
+#if 0
 		m_SquareEntityL = m_ActiveScene->CreateEntity("SquareL");
 		m_SquareEntityR = m_ActiveScene->CreateEntity("SquareR");
 		m_SquareEntityT = m_ActiveScene->CreateEntity("SquareT");
@@ -84,8 +87,11 @@ namespace IL
 
 		m_FirstCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-
+#endif
 		m_SceneHierachyPanel.SetContext(m_ActiveScene);
+
+		//SceneSerializer serializer(m_ActiveScene);
+		//serializer.DeserializeYaml("assets/scenes/scene.iscene");
 	}
 
 	void EditorLayer::OnDeatch()
@@ -158,7 +164,7 @@ namespace IL
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 		float windowMinSizeX = style.WindowMinSize.x;
-		style.WindowMinSize.x = 360.0f;
+		style.WindowMinSize.x = 400.0f;
 
 		// hold shift to dock
 		io.ConfigDockingWithShift = true;
@@ -172,6 +178,7 @@ namespace IL
 
 		if (ImGui::BeginMenuBar())
 		{
+			static bool saveScenePopup = false;
 			if (ImGui::BeginMenu("File and settings"))
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows,
@@ -182,10 +189,41 @@ namespace IL
 				//if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
 				//	dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 				ImGui::Separator();
-				if (ImGui::MenuItem("Exit"))
+				if (ImGui::MenuItem("save scene"))
+					saveScenePopup = true;
+
+				if (ImGui::MenuItem("exit"))
 					Application::GetApplication().Close();
 				ImGui::EndMenu();
 			}
+
+			if (saveScenePopup)
+				ImGui::OpenPopup("save scene");
+
+			if (ImGui::BeginPopupModal("save scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				static char filepath[256] = "assets/scenes/default.iscene";
+				ImGui::Text("filepath:");
+				ImGui::InputText("##edit", filepath, IM_ARRAYSIZE(filepath));
+				
+				if (ImGui::Button("OK", ImVec2(120, 0)))
+				{
+					ImGui::CloseCurrentPopup();
+					saveScenePopup = false;
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.SerializeYaml(filepath);
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+
+				if (ImGui::Button("Cancel", ImVec2(120, 0))) 
+				{ 
+					ImGui::CloseCurrentPopup(); 
+					saveScenePopup = false;
+				}
+				ImGui::EndPopup();
+			}
+
 			ImGui::EndMenuBar();
 		}
 		ImGui::End();
@@ -196,18 +234,18 @@ namespace IL
 #if IL_DEBUG
 		auto stats = Renderer2D::GetStats();
 
-		ImGui::Begin("Statistics");
+		ImGui::Begin("Statistics");  // Statistics
 		ImGui::Text("DrawCalls: %d", stats.DrawCalls);
 		ImGui::Text("Quads: %d", stats.QuadCount);
 		ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 		uint32_t texture = m_Texture2->GetRendererID();
 		ImGui::Image((void*)texture, ImVec2{ 256.0f, 256.0f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		ImGui::End();
+		ImGui::End();                // Statistics
 #endif
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
-		ImGui::Begin("Viewport");
+		ImGui::Begin("Viewport");  // Viewport
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 
@@ -225,7 +263,7 @@ namespace IL
 			m_ViewportSize.x = viewportSize.x;
 			m_ViewportSize.y = viewportSize.y;
 		}
-		ImGui::End();
+		ImGui::End();             // Viewport
 
 		ImGui::PopStyleVar();
 	}

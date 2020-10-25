@@ -17,12 +17,14 @@ IncludeDir["ImGui"] = "IL/vendor/imgui"
 IncludeDir["glm"] = "IL/vendor/glm"
 IncludeDir["stb_image"] = "IL/vendor/stb_image"
 IncludeDir["entt"] = "IL/vendor/entt/include"
+IncludeDir["yaml_cpp"] = "IL/vendor/yaml-cpp/include"
 
 group "Dependencies"
 
 	include "IL/vendor/GLFW"
 	include "IL/vendor/glad"
 	include "IL/vendor/imgui"
+	include "IL/vendor/yaml-cpp"
 
 group ""
 
@@ -63,7 +65,8 @@ project "IL"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
@@ -71,6 +74,7 @@ project "IL"
 		"GLFW",
 		"glad",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib"
 	}
 
@@ -183,7 +187,8 @@ project "IL-Editor"
 		"IL/src",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links

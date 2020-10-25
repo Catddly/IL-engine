@@ -64,10 +64,10 @@ namespace IL
 				translation.y -= speed * dt;
 			if (Input::IsKeyPressed(IL_KEY_D))
 				translation.x += speed * dt;
-			//if (Input::IsKeyPressed(IL_KEY_Q))
-			//	rotation.z += rotationSpeed * dt;
-			//if (Input::IsKeyPressed(IL_KEY_E))
-			//	rotation.z -= rotationSpeed * dt;
+			if (Input::IsKeyPressed(IL_KEY_LEFT_CONTROL))
+				translation.z -= 1.5f * speed * dt;
+			if (Input::IsKeyPressed(IL_KEY_SPACE))
+				translation.z += 1.5f * speed * dt;
 		}
 
 		std::string FeedbackScriptName() { return "CameraController"; }

@@ -23,6 +23,7 @@ namespace IL
 		void OnComponentAdded(Entity entity, T& component);
 	private:
 		friend class Entity;
+		friend class SceneSerializer;
 		friend class SceneHierachyPanel;
 
 		entt::registry m_Registry;
