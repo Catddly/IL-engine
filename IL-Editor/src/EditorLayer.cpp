@@ -1,5 +1,4 @@
 #include "EditorLayer.h"
-
 #include "imgui.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -8,6 +7,8 @@
 #include "Scripts/Scripts.h"
 
 #include "IL/Scene/SceneSerializer.h" 
+#include "IL/Utils/PlatformUtils.h"
+#include "IL/Input/Input.h"
 
 namespace IL
 {
@@ -89,9 +90,6 @@ namespace IL
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
 		m_SceneHierachyPanel.SetContext(m_ActiveScene);
-
-		//SceneSerializer serializer(m_ActiveScene);
-		//serializer.DeserializeYaml("assets/scenes/scene.iscene");
 	}
 
 	void EditorLayer::OnDeatch()
@@ -189,39 +187,21 @@ namespace IL
 				//if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
 				//	dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 				ImGui::Separator();
-				if (ImGui::MenuItem("save scene"))
-					saveScenePopup = true;
+
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
+
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save as", "Ctrl+Shift+S"))
+					SaveSceneAs();
+
+				ImGui::Separator();
 
 				if (ImGui::MenuItem("exit"))
 					Application::GetApplication().Close();
 				ImGui::EndMenu();
-			}
-
-			if (saveScenePopup)
-				ImGui::OpenPopup("save scene");
-
-			if (ImGui::BeginPopupModal("save scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-			{
-				static char filepath[256] = "assets/scenes/default.iscene";
-				ImGui::Text("filepath:");
-				ImGui::InputText("##edit", filepath, IM_ARRAYSIZE(filepath));
-				
-				if (ImGui::Button("OK", ImVec2(120, 0)))
-				{
-					ImGui::CloseCurrentPopup();
-					saveScenePopup = false;
-					SceneSerializer serializer(m_ActiveScene);
-					serializer.SerializeYaml(filepath);
-				}
-				ImGui::SetItemDefaultFocus();
-				ImGui::SameLine();
-
-				if (ImGui::Button("Cancel", ImVec2(120, 0))) 
-				{ 
-					ImGui::CloseCurrentPopup(); 
-					saveScenePopup = false;
-				}
-				ImGui::EndPopup();
 			}
 
 			ImGui::EndMenuBar();
@@ -270,8 +250,79 @@ namespace IL
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		//if (m_ViewportFocused && m_ViewportHovered)
-		//	m_CameraController->OnEvent(e);
+		if (Input::IsKeyPressed(IL_KEY_LEFT_CONTROL))
+		{
+
+		}
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(IL_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(IL_KEY_LEFT_CONTROL) || Input::IsKeyPressed(IL_KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(IL_KEY_LEFT_SHIFT) || Input::IsKeyPressed(IL_KEY_RIGHT_SHIFT);
+
+		IL_CORE_TRACE(control);
+		IL_CORE_TRACE(shift);
+
+		switch (e.GetKeyCode())
+		{
+			case IL_KEY_N:
+			{
+				if (control)
+					NewScene();
+
+				break;
+			}
+			case IL_KEY_O:
+			{
+				if (control)
+					OpenScene();
+
+				break;
+			}
+			case IL_KEY_S:
+			{
+				if (control && shift)
+					SaveSceneAs();
+
+				break;
+			}
+		}
+		return true;
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierachyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("IL Scene (*.iscene)\0*.iscene\0");
+		if (!filepath.empty())
+		{
+			NewScene();
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.DeserializeYaml(filepath);
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("IL Scene (*.iscene)\0*.iscene\0");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.SerializeYaml(filepath);
+		}
 	}
 
 }

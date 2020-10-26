@@ -10,8 +10,7 @@ namespace IL
 	class ILEditor : public Application
 	{
 	public: 
-		ILEditor()
-			:Application("IL Editor")
+		ILEditor() : Application("IL Editor")
 		{
 			PushLayer(new EditorLayer());
 		}

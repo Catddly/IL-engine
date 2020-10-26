@@ -97,6 +97,7 @@ namespace IL
 	void SceneHierachyPanel::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_SelectedEntity = { };
 	}
 
 	void SceneHierachyPanel::OnImGuiRender()

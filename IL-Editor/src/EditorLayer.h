@@ -20,6 +20,12 @@ namespace IL
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& e) override;
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
+	private:
 		Ref<Texture2D> m_Texture1, m_Texture2, m_TileMap;
 		Ref<SubTexture2D> m_TreeTex, m_SnowmanTex, m_FloorTex;
 		Ref<FrameBuffer> m_FrameBuffer;

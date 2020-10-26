@@ -52,9 +52,7 @@ namespace IL
 		void OnUpdate(TimeStep dt) override
 		{
 			auto& translation = GetComponent<TransformComponent>().Translation;
-			//auto& rotation = GetComponent<TransformComponent>().Rotation;
 			float speed = 5.0f;
-			//float rotationSpeed = 5.0f;
 
 			if (Input::IsKeyPressed(IL_KEY_W))
 				translation.y += speed * dt;

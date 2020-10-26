@@ -2,23 +2,23 @@ Scene: Untitled
 Entities:
   - Entity: 12837192831273
     TagComponent:
-      Tag: Pink Square
+      Tag: Square
     TransformComponent:
       Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.920496404, 0.736515522, 0.953736663, 1]
+      Color: [0.426286399, 0.861238301, 0.907473326, 1]
   - Entity: 12837192831273
     TagComponent:
       Tag: Camera
     TransformComponent:
-      Translation: [-0.244178772, 0.376605988, 4.24818993]
+      Translation: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 0
+        ProjectionType: 1
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 1
         PerspectiveFar: 10000

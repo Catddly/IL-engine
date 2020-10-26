@@ -107,9 +107,8 @@ namespace IL
 			(*--it)->OnEvent(e);
 			// if some layer from the end of the layers receive the event, stop
 			if (e.IsHandled())
-			{
 				break;
-			}
+			
 		}
 	}
 
