@@ -80,6 +80,7 @@ namespace IL
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(IL_BIND_EVENT_FN(ImGuiLayer::OnMouseScrolled));
+		dispatcher.Dispatch<KeyPressedEvent>(IL_BIND_EVENT_FN(ImGuiLayer::OnKeyPressed));
 	}
 
 	void ImGuiLayer::OnImGuiRender()
@@ -154,6 +155,11 @@ namespace IL
 	}
 
 	bool ImGuiLayer::OnMouseScrolled(MouseScrolledEvent& e)
+	{
+		return false;
+	}
+
+	bool ImGuiLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
 		return false;
 	}

@@ -57,17 +57,17 @@ namespace IL
 
 			// Instantiate and update all native scripts
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc)
+			{
+				//TODO: move to Scene::OnScenePlay
+				if (!nsc.Instance)
 				{
-					//TODO: move to Scene::OnScenePlay
-					if (!nsc.Instance)
-					{
-						nsc.Instance = nsc.instantiateScript();
-						nsc.Instance->m_Entity = Entity{ entity, this };
-						nsc.Instance->OnCreate();
-					}
+					nsc.Instance = nsc.instantiateScript();
+					nsc.Instance->m_Entity = Entity{ entity, this };
+					nsc.Instance->OnCreate();
+				}
 
-					nsc.Instance->OnUpdate(dt);
-				});
+				nsc.Instance->OnUpdate(dt);
+			});
 
 			Renderer2D::EndScene();
 		}

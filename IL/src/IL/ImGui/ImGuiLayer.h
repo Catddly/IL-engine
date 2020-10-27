@@ -26,6 +26,7 @@ namespace IL
 		void SetDarkThemeColors();
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
 	private:
 		float m_Time = 0.0f;
 	};

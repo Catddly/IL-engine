@@ -3,6 +3,7 @@
 #include "entt.hpp"
 
 #include "IL/Core/TimeStep.h"
+#include "IL/Events/Event.h"
 
 namespace IL
 {

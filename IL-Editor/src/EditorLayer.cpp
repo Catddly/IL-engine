@@ -8,7 +8,6 @@
 
 #include "IL/Scene/SceneSerializer.h" 
 #include "IL/Utils/PlatformUtils.h"
-#include "IL/Input/Input.h"
 
 namespace IL
 {
@@ -36,6 +35,7 @@ namespace IL
 		m_FrameBuffer = FrameBuffer::Create(myProps);
 
 		m_ActiveScene = CreateRef<Scene>();
+
 #if 0
 		m_SquareEntityL = m_ActiveScene->CreateEntity("SquareL");
 		m_SquareEntityR = m_ActiveScene->CreateEntity("SquareR");
@@ -89,6 +89,7 @@ namespace IL
 		m_FirstCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 #endif
+
 		m_SceneHierachyPanel.SetContext(m_ActiveScene);
 	}
 
@@ -111,15 +112,14 @@ namespace IL
 
 		{
 			IL_PROFILE_SCOPE("EditorLayer::RenderDrawCall");
-
 			m_ActiveScene->OnUpdate(dt);
-
 			m_FrameBuffer->UnBind();
 		}
 	}
 
 	void EditorLayer::OnImGuiRender()
 	{
+#pragma region Imgui::DockSpace
 		static bool p_open = true;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;
@@ -173,21 +173,14 @@ namespace IL
 		}
 
 		style.WindowMinSize.x = windowMinSizeX;
+#pragma endregion Imgui::DockSpace
 
 		if (ImGui::BeginMenuBar())
 		{
 			static bool saveScenePopup = false;
 			if (ImGui::BeginMenu("File and settings"))
 			{
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-				//if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
-				//	dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-				//if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
-				//	dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 				ImGui::Separator();
-
 				if (ImGui::MenuItem("New", "Ctrl+N"))
 					NewScene();
 
@@ -198,12 +191,10 @@ namespace IL
 					SaveSceneAs();
 
 				ImGui::Separator();
-
 				if (ImGui::MenuItem("exit"))
 					Application::GetApplication().Close();
 				ImGui::EndMenu();
 			}
-
 			ImGui::EndMenuBar();
 		}
 		ImGui::End();
@@ -211,6 +202,7 @@ namespace IL
 		// Panels
 		m_SceneHierachyPanel.OnImGuiRender();
 
+#pragma region Statistics
 #if IL_DEBUG
 		auto stats = Renderer2D::GetStats();
 
@@ -223,6 +215,9 @@ namespace IL
 		ImGui::Image((void*)texture, ImVec2{ 256.0f, 256.0f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();                // Statistics
 #endif
+#pragma endregion Statistics
+
+#pragma region ImGui::Viewport
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
 		ImGui::Begin("Viewport");  // Viewport
@@ -243,18 +238,14 @@ namespace IL
 			m_ViewportSize.x = viewportSize.x;
 			m_ViewportSize.y = viewportSize.y;
 		}
-		ImGui::End();             // Viewport
+		ImGui::End();  // Viewport
 
 		ImGui::PopStyleVar();
+#pragma endregion ImGui::Viewport
 	}
 
 	void EditorLayer::OnEvent(Event& e)
 	{
-		if (Input::IsKeyPressed(IL_KEY_LEFT_CONTROL))
-		{
-
-		}
-
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(IL_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
 	}
@@ -267,34 +258,28 @@ namespace IL
 		bool control = Input::IsKeyPressed(IL_KEY_LEFT_CONTROL) || Input::IsKeyPressed(IL_KEY_RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(IL_KEY_LEFT_SHIFT) || Input::IsKeyPressed(IL_KEY_RIGHT_SHIFT);
 
-		IL_CORE_TRACE(control);
-		IL_CORE_TRACE(shift);
-
 		switch (e.GetKeyCode())
 		{
 			case IL_KEY_N:
 			{
 				if (control)
 					NewScene();
-
 				break;
 			}
 			case IL_KEY_O:
 			{
 				if (control)
 					OpenScene();
-
 				break;
 			}
 			case IL_KEY_S:
 			{
 				if (control && shift)
 					SaveSceneAs();
-
 				break;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	void EditorLayer::NewScene()

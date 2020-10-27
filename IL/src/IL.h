@@ -24,6 +24,11 @@
 #include "IL/Scene/Entity.h"
 #include "IL/Scene/ScriptableEntity.h"
 
+#include "IL/Events/Event.h"
+#include "IL/Events/MouseEvent.h"
+#include "IL/Events/KeyEvent.h"
+#include "IL/Events/ApplicationEvent.h"
+
 // -------------Renderer-----------------
 
 #include "IL/Renderer/Buffer.h"
